@@ -1,8 +1,10 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.models import AuthToken
 from .serializers import RegisterClienteSerializer, RegisterMedicoSerializer
+from .permissions import IsAdminOrSuperUser
 
 @api_view(['POST'])
 def register_client_api(request):
@@ -22,6 +24,7 @@ def register_client_api(request):
     })
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated, IsAdminOrSuperUser])
 def register_doctor_api(request):
     serializer = RegisterMedicoSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
