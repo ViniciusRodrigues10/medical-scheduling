@@ -8,18 +8,6 @@ class Profile(models.Model):
     crm = models.CharField(max_length=20, blank=True, null=True)
     specialization = models.CharField(max_length=100, blank=True, null=True)
 
-class Availability(models.Model):
-    doctor = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
-    class Meta:
-        unique_together = ('doctor', 'date', 'start_time', 'end_time')
-
-    def __str__(self):
-        return f"{self.doctor.username} - {self.date} {self.start_time} - {self.end_time}"
-
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -64,3 +52,13 @@ class Professional(models.Model):
 
     def __str__(self):
         return self.nome
+
+class Availability(models.Model):
+    availability_id = models.AutoField(primary_key=True)
+    professional_id = models.ForeignKey(Professional, on_delete=models.CASCADE)
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    def __str__(self):
+        return f"{self.id_profissional.nome} - {self.data} ({self.hora_inicio} - {self.hora_fim})"
