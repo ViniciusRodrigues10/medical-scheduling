@@ -73,3 +73,12 @@ class Appointments(models.Model):
 
     def __str__(self):
         return f"Appointment {self.appointments_id} - {self.user_id.name}"
+    
+class Assessment(models.Model):
+    assessment_id = models.AutoField(primary_key=True)
+    appointments_id = models.ForeignKey(Appointments, on_delete=models.CASCADE)
+    assessment = models.IntegerField()
+    comment = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Assessment {self.assessment_id} - {self.appointments_id}"
