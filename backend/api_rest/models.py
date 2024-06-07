@@ -52,3 +52,15 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+class Professional(models.Model):
+    professional_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    specialty = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    telephone = models.CharField(max_length=15, blank=True, null=True)
+    crm = models.CharField(max_length=50)
+    biography = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.nome
