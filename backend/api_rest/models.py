@@ -82,3 +82,13 @@ class Assessment(models.Model):
 
     def __str__(self):
         return f"Assessment {self.assessment_id} - {self.appointments_id}"
+    
+
+class Historic(models.Model):
+    historic_id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    appointments_id = models.ForeignKey(Appointments, on_delete=models.CASCADE)
+    procedure_description = models.TextField()
+
+    def __str__(self):
+        return f"Historic {self.historic_id} - {self.user_id.name}"
