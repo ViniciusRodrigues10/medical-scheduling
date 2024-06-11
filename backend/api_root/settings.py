@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'knox',
-    # 'api_rest',
     "api_rest.apps.ApiRestConfig",
 ]
 
@@ -52,6 +51,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTH_USER_MODEL = 'api_rest.CustomUser'
 
 ROOT_URLCONF = 'api_root.urls'
 
