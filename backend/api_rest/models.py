@@ -1,94 +1,65 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_medico = models.BooleanField(default=False)
-    crm = models.CharField(max_length=20, blank=True, null=True)
-    specialization = models.CharField(max_length=100, blank=True, null=True)
-
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError('The Email field must be set')
+            raise ValueError('The email is not given.')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
-
-    def create_superuser(self, email, password=None, **extra_fields):
+    
+    def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        if not extra_fields.get('is_staff'):
+            raise ValueError('Superuser must have is_staff = True')
         
+        if not extra_fields.get('is_superuser'):
+            raise ValueError('Superuser must have is_superuser = True')  
         return self.create_user(email, password, **extra_fields)
 
-class User(AbstractBaseUser):
+class CustomUser(AbstractBaseUser):
+    GENDER_CHOICES = (
+        (1, 'male'),
+        (2, 'female'),
+        (3, 'other')
+    )
+
+    USER_TYPE_CHOICES = (
+        (1, 'patient'),
+        (2, 'doctor')
+    )
+
     id_user = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255)
-    user_type = models.CharField(max_length=20)
-    telephone = models.CharField(max_length=15, blank=True, null=True)
-    date_of_birth = models.DateField(blank=True, null=True)
+    email = models.EmailField(max_length=254, blank=False, unique=True)
+    password = models.CharField(max_length=128, blank=False, null=True)
+    first_name = models.CharField(max_length=255, blank=False, null=True,)
+    last_name = models.CharField(max_length=255, blank=False, null=True)
+    gender = models.SmallIntegerField(choices=GENDER_CHOICES, blank=False)
+    telephone = models.CharField(max_length=15, blank=False, null=True)
+    date_of_birth = models.DateField(blank=False, null=True)
+    user_type = models.SmallIntegerField(choices=GENDER_CHOICES, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'gender', 'user_type']
 
     objects = UserManager()
 
     def __str__(self):
         return self.email
 
-class Professional(models.Model):
-    professional_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    specialty = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    telephone = models.CharField(max_length=15, blank=True, null=True)
-    crm = models.CharField(max_length=50)
-    biography = models.TextField(blank=True, null=True)
+    def has_module_perms(self, app_label):
+        return True
 
-    def __str__(self):
-        return self.name
-
-class Availability(models.Model):
-    availability_id = models.AutoField(primary_key=True)
-    professional_id = models.ForeignKey(Professional, on_delete=models.CASCADE)
-    date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-
-    def __str__(self):
-        return f"{self.professional_id.name} - {self.date} ({self.start_time} - {self.end_time})"
-    
-class Appointments(models.Model):
-    appointments_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    availability_id = models.ForeignKey(Availability, on_delete=models.CASCADE)
-    status = models.CharField(max_length=20)
-    schedule_date = models.DateTimeField(auto_now_add=True)
-    comments = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return f"Appointment {self.appointments_id} - {self.user_id.name}"
-    
-class Assessment(models.Model):
-    assessment_id = models.AutoField(primary_key=True)
-    appointments_id = models.ForeignKey(Appointments, on_delete=models.CASCADE)
-    assessment = models.IntegerField()
-    comment = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return f"Assessment {self.assessment_id} - {self.appointments_id}"
-    
-
-class Historic(models.Model):
-    historic_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    appointments_id = models.ForeignKey(Appointments, on_delete=models.CASCADE)
-    procedure_description = models.TextField()
-
-    def __str__(self):
-        return f"Historic {self.historic_id} - {self.user_id.name}"
+    def has_perm(self, perm, obj=None):
+        return True
