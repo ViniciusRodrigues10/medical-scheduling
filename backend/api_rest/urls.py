@@ -8,6 +8,7 @@ urlpatterns = [
     path('user/', views.get_user_data, name='user'),
     path('update-user/', views.update_user_data, name='update-user'),
     path('logout/', knox_views.LogoutView.as_view()),
-    path('logoutall', knox_views.LogoutAllView.as_view())
+    path('logoutall', knox_views.LogoutAllView.as_view()),
+    path('delete-account/', views.delete_user_account, name='delete-account'),
 ]
  
