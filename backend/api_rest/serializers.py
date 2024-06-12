@@ -42,4 +42,19 @@ class EmailAuthTokenSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'first_name', 'last_name', 'gender', 'telephone', 'date_of_birth']
+        # fields = '__all__'
+        extra_kwargs = {
+            'email': {'required': True}
+        }
+
+    def validate_email(self, value):
+        user = self.context['request'].user
+        if CustomUser.objects.exclude(pk=user.id_user).filter(email=value).exists():
+            raise serializers.ValidationError('This email is already in use')
+        return value
     
