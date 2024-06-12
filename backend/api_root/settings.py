@@ -54,6 +54,11 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = 'api_rest.CustomUser'
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'api_rest.authentication.EmailBackend',
+]
+
 ROOT_URLCONF = 'api_root.urls'
 
 TEMPLATES = [
