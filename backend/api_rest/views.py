@@ -84,4 +84,14 @@ def update_user_data(request):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_user_account(request):
+    try:
+        user = request.user
+    except CustomUser.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
     
+    user.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
