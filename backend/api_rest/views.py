@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from knox.models import AuthToken
-from .serializers import CustomUserSerializer, EmailAuthTokenSerializer
+from .models import CustomUser
+from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer
 
 @api_view(['POST'])
 def register_patient_api(request):
@@ -67,3 +68,20 @@ def get_user_data(request):
             'date_of_birth': user.date_of_birth,
         },
     }, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user_data(request):
+    try:
+        user = request.user
+    except CustomUser.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'PUT':
+        serializer = UpdateUserSerializer(user, data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
