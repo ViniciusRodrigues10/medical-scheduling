@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import CustomUser
+from .models import CustomUser, Doctor
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,6 +24,20 @@ class CustomUserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'first_name', 'last_name', 'gender', 'telephone', 'date_of_birth']
+        extra_kwargs = {
+            'email': {'required': True}
+        }
+
+    def validate_email(self, value):
+        user = self.context['request'].user
+        if CustomUser.objects.exclude(pk=user.id_user).filter(email=value).exists():
+            raise serializers.ValidationError('This email is already in use')
+        return value
+
 class EmailAuthTokenSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
@@ -42,19 +56,18 @@ class EmailAuthTokenSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+    
+class DoctorSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer()
 
-class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser
-        fields = ['email', 'first_name', 'last_name', 'gender', 'telephone', 'date_of_birth']
-        # fields = '__all__'
-        extra_kwargs = {
-            'email': {'required': True}
-        }
+        model = Doctor
+        fields = ['user', 'specialty', 'crm', 'biography']
 
-    def validate_email(self, value):
-        user = self.context['request'].user
-        if CustomUser.objects.exclude(pk=user.id_user).filter(email=value).exists():
-            raise serializers.ValidationError('This email is already in use')
-        return value
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user = CustomUser.objects.create_user(**user_data)
+        doctor = Doctor.objects.create(user=user, **validated_data)
+
+        return doctor
     
