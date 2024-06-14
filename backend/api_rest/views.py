@@ -151,3 +151,18 @@ def get_doctor_data(request):
             'biography': doctor.biography
         },
     }, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_doctor_data(request):
+    try:
+        doctor = Doctor.objects.get(user=request.user)
+    except CustomUser.DoesNotExist:
+        return Response({"error": "Doctor not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = DoctorSerializer(doctor, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
