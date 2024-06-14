@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from knox.models import AuthToken
-from .models import CustomUser
+from .models import CustomUser, Doctor
 from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer, DoctorSerializer
 
 @api_view(['POST'])
@@ -125,3 +125,29 @@ def register_doctor(request):
         },
         'token': token
     }, status=status.HTTP_201_CREATED)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_doctor_data(request):
+    try:
+        doctor = Doctor.objects.get(user=request.user)
+    except Doctor.DoesNotExist:
+        return Response({'error': 'Doctor not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response({
+        'user_info': {
+            'id_user': doctor.user.id_user,
+            'email': doctor.user.email,
+            'first_name': doctor.user.first_name,
+            'last_name': doctor.user.last_name,
+            'gender': doctor.user.gender,
+            'telephone': doctor.user.telephone,
+            'date_of_birth': doctor.user.date_of_birth,
+            'user_type': doctor.user.user_type
+        },
+        'doctor_info': {
+            'specialty': doctor.specialty,
+            'crm': doctor.crm,
+            'biography': doctor.biography
+        },
+    }, status=status.HTTP_200_OK)
