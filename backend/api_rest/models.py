@@ -63,3 +63,12 @@ class CustomUser(AbstractBaseUser):
 
     def has_perm(self, perm, obj=None):
         return True
+
+class Doctor(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    specialty = models.CharField(max_length=255)
+    crm = models.CharField(max_length=50, unique=True)
+    biography = models.TextField()
+
+    def __str__(self):
+        return f'{self.user.first_name} {self.user.last_name} - {self.specialty}' 
