@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from knox.models import AuthToken
 from .models import CustomUser
-from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer
+from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer, DoctorSerializer
 
 @api_view(['POST'])
 def register_patient_api(request):
@@ -95,3 +95,33 @@ def delete_user_account(request):
     
     user.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['POST'])
+def register_doctor(request):
+    data = request.data.copy()
+    data['user']['user_type'] = 2
+
+    serializer = DoctorSerializer(data=data)
+    serializer.is_valid(raise_exception=True)
+    
+    doctor = serializer.save()
+    _, token = AuthToken.objects.create(doctor.user)
+
+    return Response({
+        'user_info': {
+            'id_user': doctor.user.id_user,
+            'email': doctor.user.email,
+            'first_name': doctor.user.first_name,
+            'last_name': doctor.user.last_name,
+            'gender': doctor.user.gender,
+            'telephone': doctor.user.telephone,
+            'date_of_birth': doctor.user.date_of_birth,
+            'user_type': doctor.user.user_type
+        },
+        'doctor_info': {
+            'specialty': doctor.specialty,
+            'crm': doctor.crm,
+            'biography': doctor.biography
+        },
+        'token': token
+    }, status=status.HTTP_201_CREATED)
