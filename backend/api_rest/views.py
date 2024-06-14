@@ -166,3 +166,17 @@ def update_doctor_data(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_doctor_account(request):
+    try:
+        doctor = Doctor.objects.get(user=request.user)
+    except Doctor.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    user = doctor.user
+    doctor.delete()
+    user.delete()
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
