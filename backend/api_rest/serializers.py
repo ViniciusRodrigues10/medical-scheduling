@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import CustomUser, Doctor
+from .models import CustomUser, Doctor, Availability
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -89,3 +89,11 @@ class DoctorSerializer(serializers.ModelSerializer):
         user.save()
 
         return instance
+
+class AvailabilitySerializer(serializers.ModelSerializer):
+    doctor_name = serializers.CharField(source='id_professional.user.get_full_name', read_only=True)
+    specialty = serializers.CharField(source='id_professional.specialty', read_only=True)
+
+    class Meta:
+        model = Availability
+        fields = ['id_availability', 'id_professional', 'date', 'start_time', 'end_time', 'doctor_name', 'specialty']
