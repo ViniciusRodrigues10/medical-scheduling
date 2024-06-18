@@ -72,3 +72,13 @@ class Doctor(models.Model):
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name} - {self.specialty}' 
+
+class Availability(models.Model):
+    id_availability = models.AutoField(primary_key=True)
+    id_professional = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='availabilities')
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    class Meta:
+        unique_together = ('id_professional', 'date', 'start_time', 'end_time')
