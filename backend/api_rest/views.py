@@ -2,9 +2,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from .models import CustomUser, Doctor, Availability
 from knox.models import AuthToken
-from .models import CustomUser, Doctor
-from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer, DoctorSerializer
+from django.db.models import Q
+from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer, DoctorSerializer, AvailabilitySerializer
 
 @api_view(['POST'])
 def register_patient_api(request):
@@ -96,6 +97,7 @@ def delete_user_account(request):
     user.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+# TODO: Adicionar restrição, só superuser e admin podem registrar médicos 
 @api_view(['POST'])
 def register_doctor(request):
     data = request.data.copy()
@@ -167,6 +169,7 @@ def update_doctor_data(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# TODO: adicionar restrição, só superuser e admin podem deletar médicos
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_doctor_account(request):
@@ -180,3 +183,49 @@ def delete_doctor_account(request):
     user.delete()
 
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# TODO: Possivelmente remover o GET
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def availability_list_create(request):
+    if request.method == 'GET':
+        user = request.user
+        availabilities = Availability.objects.filter(id_professional__user=user)
+        serializer = AvailabilitySerializer(availabilities, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST': 
+        data = request.data.copy()
+        data['id_professional'] = Doctor.objects.get(user=request.user).pk
+        serializer = AvailabilitySerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def availability_list(request):
+    query_params = request.query_params
+    doctor_name = query_params.get('doctor_name', None)
+    specialty = query_params.get('specialty', None)
+
+    availabilities = Availability.objects.all()
+
+    if doctor_name: 
+        availabilities = availabilities.filter(
+            Q(id_professional__user__first_name__icontains=doctor_name) |
+            Q(id_professional__user__last_name__icontains=doctor_name)
+        )
+    
+    if specialty:
+        availabilities = availabilities.filter(
+            Q(id_professional__specialty__icontains=specialty)
+        )
+
+    serializer = AvailabilitySerializer(availabilities, many=True)
+    return Response(serializer.data)
+
+# TODO: Criar o opção de atualizar as disponibilidades, e remover a disponibilidade
