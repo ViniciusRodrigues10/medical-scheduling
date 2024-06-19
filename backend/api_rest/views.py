@@ -5,7 +5,7 @@ from rest_framework import status
 from .models import CustomUser, Doctor, Availability
 from knox.models import AuthToken
 from django.db.models import Q
-from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer, DoctorSerializer, AvailabilitySerializer
+from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer, DoctorSerializer, AvailabilitySerializer, UpdateAvailabilitySerializer
 
 @api_view(['POST'])
 def register_patient_api(request):
@@ -97,7 +97,7 @@ def delete_user_account(request):
     user.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-# TODO: Adicionar restrição, só superuser e admin podem registrar médicos 
+# TODO: Add restriction, only superuser and administrator can register doctors
 @api_view(['POST'])
 def register_doctor(request):
     data = request.data.copy()
@@ -169,7 +169,7 @@ def update_doctor_data(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# TODO: adicionar restrição, só superuser e admin podem deletar médicos
+# TODO: add restriction, only superuser and admin can delete doctors
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_doctor_account(request):
@@ -185,7 +185,7 @@ def delete_doctor_account(request):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# TODO: Possivelmente remover o GET
+# TODO: possibly remove the GET
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def availability_list_create(request):
@@ -228,4 +228,29 @@ def availability_list(request):
     serializer = AvailabilitySerializer(availabilities, many=True)
     return Response(serializer.data)
 
-# TODO: Criar o opção de atualizar as disponibilidades, e remover a disponibilidade
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_availability(request):
+    try:
+        user = request.user
+        doctor = Doctor.objects.get(user=user)
+        date = request.data.get('date')
+        start_time = request.data.get('start_time')
+        end_time = request.data.get('end_time')
+        
+        availability = Availability.objects.get(id_professional=doctor, date=date, start_time=start_time, end_time=end_time)
+    except Availability.DoesNotExist:
+        return Response({"error": "Availability not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    update_data = {
+        'date': request.data.get('new_date', availability.date),
+        'start_time': request.data.get('new_start_time', availability.start_time),
+        'end_time': request.data.get('new_end_time', availability.end_time)
+    }
+    
+    serializer = UpdateAvailabilitySerializer(availability, data=update_data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
