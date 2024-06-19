@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import CustomUser, Doctor, Availability
+from .models import CustomUser, Doctor, Availability, Appointment
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -102,4 +102,8 @@ class UpdateAvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = ['date', 'start_time', 'end_time']
-        
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = ['id_appointment', 'id_user', 'id_professional', 'date', 'start_time', 'end_time', 'created_at']
