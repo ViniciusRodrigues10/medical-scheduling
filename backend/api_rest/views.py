@@ -2,10 +2,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import CustomUser, Doctor, Availability
+from .models import CustomUser, Doctor, Availability, Appointment
+from datetime import datetime, timedelta
 from knox.models import AuthToken
 from django.db.models import Q
-from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer, DoctorSerializer, AvailabilitySerializer, UpdateAvailabilitySerializer
+from .serializers import CustomUserSerializer, EmailAuthTokenSerializer, UpdateUserSerializer, DoctorSerializer, AvailabilitySerializer, UpdateAvailabilitySerializer, AppointmentSerializer
 
 @api_view(['POST'])
 def register_patient_api(request):
@@ -271,3 +272,46 @@ def delete_availability(request):
     
     availability.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def book_appointment(request):
+    user = request.user
+    doctor_first_name = request.data.get('doctor_first_name')
+    doctor_last_name = request.data.get('doctor_last_name')
+    date_str = request.data.get('date')
+    start_time_str = request.data.get('start_time')
+
+    if not doctor_first_name or not doctor_last_name or not date_str or not start_time_str:
+        return Response({"error": "Doctor's first name, last name, date, and start time are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        doctor = Doctor.objects.get(user__first_name=doctor_first_name, user__last_name=doctor_last_name)
+    except Doctor.DoesNotExist:
+        return Response({"error": "Doctor not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    start_time = datetime.strptime(start_time_str, '%H:%M:%S').time()
+
+    duration = timedelta(minutes=30)
+    end_time = (datetime.combine(date, start_time) + duration).time()
+
+    try:
+        availability = Availability.objects.get(id_professional=doctor, date=date, start_time=start_time)
+    except Availability.DoesNotExist:
+        return Response({"error": "No availability found for the requested time"}, status=status.HTTP_404_NOT_FOUND)
+
+    appointment = Appointment(
+        id_user=user,
+        id_professional=doctor,
+        date=date,
+        start_time=start_time,
+        end_time=end_time
+    )
+    appointment.save()
+
+    availability.start_time = end_time
+    availability.save()
+
+    serializer = AppointmentSerializer(appointment)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
