@@ -97,3 +97,9 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = ['id_availability', 'id_professional', 'date', 'start_time', 'end_time', 'doctor_name', 'specialty']
+
+class UpdateAvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Availability
+        fields = ['date', 'start_time', 'end_time']
+        
