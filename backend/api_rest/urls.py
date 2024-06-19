@@ -18,4 +18,5 @@ urlpatterns = [
     path('availability-list/', views.availability_list),
     path('update-availability/', views.update_availability, name='update-availability'),
     path('availability/delete/', views.delete_availability, name='delete-availability'),
+    path('appointment/book/', views.book_appointment, name='book-appointment'),
 ]
