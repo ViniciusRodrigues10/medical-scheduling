@@ -254,3 +254,20 @@ def update_availability(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_availability(request):
+    try:
+        user = request.user
+        doctor = Doctor.objects.get(user=user)
+        date = request.data.get('date')
+        start_time = request.data.get('start_time')
+        end_time = request.data.get('end_time')
+
+        availability = Availability.objects.get(id_professional=doctor, date=date, start_time=start_time, end_time=end_time)
+    except Availability.DoesNotExist:
+        return Response({"error": "Availability not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    availability.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
