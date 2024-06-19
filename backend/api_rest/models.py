@@ -82,3 +82,18 @@ class Availability(models.Model):
 
     class Meta:
         unique_together = ('id_professional', 'date', 'start_time', 'end_time')
+
+class Appointment(models.Model):
+    id_appointment = models.AutoField(primary_key=True)
+    id_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='appointments')
+    id_professional = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='appointments')
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('id_professional', 'date', 'start_time', 'end_time')
+
+    def __str__(self):
+        return f'{self.id_user} with {self.id_professional} on {self.date} from {self.start_time} to {self.end_time}'
