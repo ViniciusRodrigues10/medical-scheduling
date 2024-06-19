@@ -17,4 +17,5 @@ urlpatterns = [
     path('availability-list-create/', views.availability_list_create, name='availability-list-create'),
     path('availability-list/', views.availability_list),
     path('update-availability/', views.update_availability, name='update-availability'),
+    path('availability/delete/', views.delete_availability, name='delete-availability'),
 ]
