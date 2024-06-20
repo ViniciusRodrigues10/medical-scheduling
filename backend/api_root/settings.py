@@ -137,3 +137,6 @@ REST_FRAMEWORK = {
         'knox.auth.TokenAuthentication',
     ),
 }
+
+TIME_ZONE = 'America/Sao_Paulo'
+USE_TZ = True
