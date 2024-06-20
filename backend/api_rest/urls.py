@@ -14,6 +14,7 @@ urlpatterns = [
     path('logoutall', knox_views.LogoutAllView.as_view()),
     path('delete-account/', views.delete_user_account, name='delete-account'),
     path('delete-doctor/', views.delete_doctor_account, name='delete-doctor'),
+    path('delete-appointment/', views.delete_appointment, name='delete-appointment'),
     path('availability-list-create/', views.availability_list_create, name='availability-list-create'),
     path('availability-list/', views.availability_list),
     path('update-availability/', views.update_availability, name='update-availability'),
