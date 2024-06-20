@@ -186,7 +186,7 @@ def delete_doctor_account(request):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# TODO: possibly remove the GET
+# TODO: possibly remove the GET / add valid time checks, do not allow adding past days and times
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def availability_list_create(request):
@@ -273,6 +273,7 @@ def delete_availability(request):
     availability.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+# TODO: Understand why I can't make an appointment for the same day
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def book_appointment(request):
@@ -290,9 +291,21 @@ def book_appointment(request):
     except Doctor.DoesNotExist:
         return Response({"error": "Doctor not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    date = datetime.strptime(date_str, '%Y-%m-%d').date()
-    start_time = datetime.strptime(start_time_str, '%H:%M:%S').time()
+    try: 
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        start_time = datetime.strptime(start_time_str, '%H:%M:%S').time()
+        curret_date = datetime.today().date()
+        # print("DATA DE HOJE: ", curret_date)
+        current_time = datetime.now().time()
+        
+    except ValueError as e:
+        return Response({"error: str(e)"}, status=status.HTTP_400_BAD_REQUEST)
 
+    if date < curret_date:
+        return Response({"error": "Invalid date"}, status=status.HTTP_400_BAD_REQUEST)
+    if date == curret_date and start_time < current_time:
+        return Response({"error": "Invalid time"}, status=status.HTTP_400_BAD_REQUEST)
+    
     duration = timedelta(minutes=30)
     end_time = (datetime.combine(date, start_time) + duration).time()
 
