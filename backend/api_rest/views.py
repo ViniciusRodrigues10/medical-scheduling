@@ -328,3 +328,29 @@ def book_appointment(request):
 
     serializer = AppointmentSerializer(appointment)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# TODO: Test whether another user can delete queries that are not theirs and think about how I can do this 
+# if the user cancels the appointment, the doctor's schedule will be available again
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_appointment(request):
+    user = request.user
+    date_str = request.data.get('date')
+    start_time_str = request.data.get('start_time')
+
+    if not date_str or not start_time_str:
+        return Response({"error": "Date and start time are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        start_time = datetime.strptime(start_time_str, '%H:%M:%S').time()
+    except ValueError:
+        return Response({"error": "Invalid date or time format"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        appointment = Appointment.objects.get(id_user=user, date=date, start_time=start_time)
+    except Appointment.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    appointment.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
