@@ -186,7 +186,8 @@ def delete_doctor_account(request):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# TODO: possibly remove the GET / add valid time checks, do not allow adding past days and times
+# TODO: possibly remove the GET 
+# add valid time checks, do not allow adding past days and times
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def availability_list_create(request):
@@ -206,6 +207,7 @@ def availability_list_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# TODO: When a user makes an appointment, you must update the availability list
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def availability_list(request):
@@ -273,7 +275,6 @@ def delete_availability(request):
     availability.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-# TODO: Understand why I can't make an appointment for the same day
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def book_appointment(request):
@@ -295,7 +296,6 @@ def book_appointment(request):
         date = datetime.strptime(date_str, '%Y-%m-%d').date()
         start_time = datetime.strptime(start_time_str, '%H:%M:%S').time()
         curret_date = datetime.today().date()
-        # print("DATA DE HOJE: ", curret_date)
         current_time = datetime.now().time()
         
     except ValueError as e:
@@ -309,10 +309,17 @@ def book_appointment(request):
     duration = timedelta(minutes=30)
     end_time = (datetime.combine(date, start_time) + duration).time()
 
-    try:
-        availability = Availability.objects.get(id_professional=doctor, date=date, start_time=start_time)
-    except Availability.DoesNotExist:
-        return Response({"error": "No availability found for the requested time"}, status=status.HTTP_404_NOT_FOUND)
+    doctor_id = doctor.user.id_user
+    appointment_exists = Appointment.objects.filter(
+        id_professional=doctor_id,
+        date=date
+    ).filter(
+        start_time__lt=end_time,
+        end_time__gt=start_time
+    ).exists()
+    
+    if appointment_exists:
+        return Response({"message": "The doctor is not available at the given date and time"}, status=status.HTTP_200_OK)
 
     appointment = Appointment(
         id_user=user,
@@ -323,14 +330,10 @@ def book_appointment(request):
     )
     appointment.save()
 
-    availability.start_time = end_time
-    availability.save()
-
     serializer = AppointmentSerializer(appointment)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 # TODO: Test whether another user can delete queries that are not theirs and think about how I can do this 
-# if the user cancels the appointment, the doctor's schedule will be available again
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_appointment(request):
@@ -351,6 +354,6 @@ def delete_appointment(request):
         appointment = Appointment.objects.get(id_user=user, date=date, start_time=start_time)
     except Appointment.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
+
     appointment.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
