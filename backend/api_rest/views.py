@@ -332,8 +332,7 @@ def book_appointment(request):
 
     serializer = AppointmentSerializer(appointment)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-# TODO: Test whether another user can delete queries that are not theirs and think about how I can do this 
+ 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_appointment(request):
