@@ -29,3 +29,23 @@ class ValidateEmailForRegistrationFacade():
         
         return email
     
+class ValidateLogin():
+    def __init__(self, attrs, context):
+        self.attrs = attrs
+        self.context = context
+        self.email = self.attrs.get('email')
+        self.password = self.attrs.get('password')
+        self.user = None
+    
+    def validate(self):
+        if self.email and self.password:
+            self.user = authenticate(request=self.context.get('request'), email=self.email, password=self.password)
+
+            if not self.user:
+                raise serializers.ValidationError('Invalid email or password.', code='authorization')
+        else: 
+            raise serializers.ValidationError('Must include "email" and "password".', code='authorization')
+
+        self.attrs['user'] = self.user
+        
+        return self.attrs
