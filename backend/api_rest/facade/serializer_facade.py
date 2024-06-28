@@ -16,3 +16,16 @@ class UserCreatorFacade():
 
         instance.save()
         return instance
+
+class ValidateEmailForRegistrationFacade():
+    def __init__(self, user, class_user) -> None:
+        self.user = user
+        self.class_user = class_user
+
+
+    def evaluates_whether_email_is_in_use(self, email):
+        if self.class_user.objects.exclude(pk=self.user.id_user).filter(email=email).exists():
+            raise serializers.ValidationError('This email is already in use')
+        
+        return email
+    
