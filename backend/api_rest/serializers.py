@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth import authenticate
 from .models import CustomUser, Doctor, Availability, Appointment
+from .facade.serializer_facade import UserCreatorFacade, ValidateEmailForRegistrationFacade, ValidateLogin, DoctorFacade
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,13 +17,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        password = validated_data.pop('password', None)
-        instance = self.Meta.model(**validated_data)
-        if password is not None:
-            instance.set_password(password)
-        instance.save()
-        return instance
+        create_user = UserCreatorFacade(self.Meta.model)
 
+        return create_user.create_user(validated_data)
+    
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -32,30 +29,19 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             'email': {'required': True}
         }
 
-    def validate_email(self, value):
+    def validate_email(self, email):
         user = self.context['request'].user
-        if CustomUser.objects.exclude(pk=user.id_user).filter(email=value).exists():
-            raise serializers.ValidationError('This email is already in use')
-        return value
+        email_validator = ValidateEmailForRegistrationFacade(user, CustomUser)
+
+        return email_validator.evaluates_whether_email_is_in_use(email)
 
 class EmailAuthTokenSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
 
     def validate(self, attrs):
-        email = attrs.get('email')
-        password = attrs.get('password')
-
-        if email and password:
-            user = authenticate(request=self.context.get('request'), email=email, password=password)
-
-            if not user:
-                raise serializers.ValidationError('Invalid email or password.', code='authorization')
-        else:
-            raise serializers.ValidationError('Must include "email" and "password".', code='authorization')
-
-        attrs['user'] = user
-        return attrs
+        validate_login = ValidateLogin(attrs, self.context)
+        return validate_login.validate()
     
 class DoctorSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer()
@@ -63,32 +49,14 @@ class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
         fields = ['user', 'specialty', 'crm', 'biography']
-
-    def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        user = CustomUser.objects.create_user(**user_data)
-        doctor = Doctor.objects.create(user=user, **validated_data)
-
-        return doctor
     
+    def create(self, validated_data):
+        doctor = DoctorFacade()
+        return doctor.create_doctor(validated_data)
+
     def update(self, instance, validated_data):
-        user_data = validated_data.pop('user')
-        user = instance.user
-
-        instance.specialty = validated_data.get('specialty', instance.specialty)
-        instance.crm = validated_data.get('crm', instance.crm)
-        instance.biography = validated_data.get('biography', instance.biography)
-        instance.save()
-
-        user.first_name = user_data.get('first_name', user.first_name)
-        user.last_name = user_data.get('last_name', user.last_name)
-        user.email = user_data.get('email', user.email)
-        user.gender = user_data.get('gender', user.gender)
-        user.telephone = user_data.get('telephone', user.telephone)
-        user.date_of_birth = user_data.get('date_of_birth', user.date_of_birth)
-        user.save()
-
-        return instance
+        doctor = DoctorFacade()
+        return doctor.update_doctor(instance, validated_data)
 
 class AvailabilitySerializer(serializers.ModelSerializer):
     doctor_name = serializers.CharField(source='id_professional.user.get_full_name', read_only=True)
