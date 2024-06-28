@@ -49,3 +49,30 @@ class ValidateLogin():
         self.attrs['user'] = self.user
         
         return self.attrs
+
+class DoctorFacade():
+    def create_doctor(self, validated_data):
+        user_data = validated_data.pop('user')
+        self.user = CustomUser.objects.create_user(**user_data)
+        doctor = Doctor.objects.create(user=self.user, **validated_data)
+
+        return doctor
+    
+    def update_doctor(self, instance, validated_data):
+        user_data = validated_data.pop('user')
+        user = instance.user
+
+        instance.specialty = validated_data.get('specialty', instance.specialty)
+        instance.crm = validated_data.get('crm', instance.crm)
+        instance.biography = validated_data.get('biography', instance.biography)
+        instance.save()
+
+        user.first_name = user_data.get('first_name', user.first_name)
+        user.last_name = user_data.get('last_name', user.last_name)
+        user.email = user_data.get('email', user.email)
+        user.gender = user_data.get('gender', user.gender)
+        user.telephone = user_data.get('telephone', user.telephone)
+        user.date_of_birth = user_data.get('date_of_birth', user.date_of_birth)
+        user.save()
+
+        return instance
