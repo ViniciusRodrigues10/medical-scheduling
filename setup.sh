@@ -18,7 +18,7 @@ else
     echo "Versão do Python atual é $CURRENT_PYTHON_VERSION, que é a versão desejada."
 fi
 
-python -m venv venv
+python3 -m venv venv
 
 activate_virtualenv() {
     if [[ "$OSTYPE" == "linux-gnu"* || "$OSTYPE" == "darwin"* ]]; then
