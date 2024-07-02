@@ -1,0 +1,5 @@
+commitizen:
+  name: cz_conventional_commits
+  version: 1.2.3
+  tag_format: v$version
+  bump_message: "chore(release): bump version to $new_version"
