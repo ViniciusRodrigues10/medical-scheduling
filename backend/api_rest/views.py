@@ -11,6 +11,7 @@ from .serializers import (
     AppointmentSerializer,
 )
 from .facade.views_facade import (
+    AvailabilityFacade,
     UserPatientFacade,
     UserDoctorFacade,
     LoginFacade,
@@ -92,81 +93,22 @@ def availability_list_create(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def availability_list(request):
-    query_params = request.query_params
-    doctor_name = query_params.get("doctor_name", None)
-    specialty = query_params.get("specialty", None)
-
-    availabilities = Availability.objects.all()
-
-    if doctor_name:
-        availabilities = availabilities.filter(
-            Q(id_professional__user__first_name__icontains=doctor_name)
-            | Q(id_professional__user__last_name__icontains=doctor_name)
-        )
-
-    if specialty:
-        availabilities = availabilities.filter(
-            Q(id_professional__specialty__icontains=specialty)
-        )
-
-    serializer = AvailabilitySerializer(availabilities, many=True)
-    return Response(serializer.data)
+    availability = AvailabilityFacade
+    return availability.list_of_availability(request)
 
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def update_availability(request):
-    try:
-        user = request.user
-        doctor = Doctor.objects.get(user=user)
-        date = request.data.get("date")
-        start_time = request.data.get("start_time")
-        end_time = request.data.get("end_time")
-
-        availability = Availability.objects.get(
-            id_professional=doctor, date=date, start_time=start_time, end_time=end_time
-        )
-    except Availability.DoesNotExist:
-        return Response(
-            {"error": "Availability not found"}, status=status.HTTP_404_NOT_FOUND
-        )
-
-    update_data = {
-        "date": request.data.get("new_date", availability.date),
-        "start_time": request.data.get("new_start_time", availability.start_time),
-        "end_time": request.data.get("new_end_time", availability.end_time),
-    }
-
-    serializer = UpdateAvailabilitySerializer(
-        availability, data=update_data, partial=True
-    )
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    availability = AvailabilityFacade
+    return availability.update(request)
 
 
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
 def delete_availability(request):
-    try:
-        user = request.user
-        doctor = Doctor.objects.get(user=user)
-        date = request.data.get("date")
-        start_time = request.data.get("start_time")
-        end_time = request.data.get("end_time")
-
-        availability = Availability.objects.get(
-            id_professional=doctor, date=date, start_time=start_time, end_time=end_time
-        )
-    except Availability.DoesNotExist:
-        return Response(
-            {"error": "Availability not found"}, status=status.HTTP_404_NOT_FOUND
-        )
-
-    availability.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    availability = AvailabilityFacade
+    return availability.delete(request)
 
 
 @api_view(["POST"])
