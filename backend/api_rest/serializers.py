@@ -1,10 +1,18 @@
 from rest_framework import serializers
-from .models import CustomUser, Doctor, Availability, Appointment
+from .models import (
+    CustomUser,
+    Doctor,
+    Availability,
+    Appointment,
+    EmergencyContact,
+    MedicalHistory,
+    LifeHabits,
+    AdditionalInformation,
+)
 from .facade.serializer_facade import (
     UserCreatorFacade,
     ValidateEmailForRegistrationFacade,
     ValidateLoginFacade,
-    DoctorFacade,
 )
 
 
@@ -18,9 +26,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "gender",
-            "telephone",
-            "date_of_birth",
             "user_type",
+            "is_staff",
+            "is_superuser",
         ]
         extra_kwargs = {
             "email": {"required": True},
@@ -28,8 +36,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "first_name": {"required": True},
             "last_name": {"required": True},
             "gender": {"required": True},
-            "telephone": {"required": True},
-            "date_of_birth": {"required": True},
         }
 
     def create(self, validated_data):
@@ -38,17 +44,84 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return create_user.create_user(validated_data)
 
 
+class AdditionalInformationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdditionalInformation
+        fields = [
+            "user",
+            "telephone",
+            "date_of_birth",
+            "completed_form",
+        ]
+
+
+class EmergencyContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmergencyContact
+        fields = ["id", "name", "phone_number"]
+
+
+class MedicalHistorySerializer(serializers.ModelSerializer):
+    emergency_contacts = EmergencyContactSerializer(many=True)
+
+    class Meta:
+        model = MedicalHistory
+        fields = [
+            "id_medical_history",
+            "id_user",
+            "current_medications",
+            "allergies",
+            "surgeries",
+            "family_history",
+            "blood_type",
+            "emergency_contacts",
+        ]
+
+    def create(self, validated_data):
+        emergency_contacts_data = validated_data.pop("emergency_contacts")
+        medical_history = MedicalHistory.objects.create(**validated_data)
+
+        for contact_data in emergency_contacts_data:
+            emergency_contact = EmergencyContact.objects.create(**contact_data)
+            medical_history.emergency_contacts.add(emergency_contact)
+
+        return medical_history
+
+    def update(self, instance, validated_data):
+        emergency_contacts_data = validated_data.pop("emergency_contacts")
+        instance.current_medications = validated_data.get(
+            "current_medications", instance.current_medications
+        )
+        instance.allergies = validated_data.get("allergies", instance.allergies)
+        instance.surgeries = validated_data.get("surgeries", instance.surgeries)
+        instance.family_history = validated_data.get(
+            "family_history", instance.family_history
+        )
+        instance.blood_type = validated_data.get("blood_type", instance.blood_type)
+        instance.health_plan = validated_data.get("health_plan", instance.health_plan)
+        instance.save()
+
+        instance.emergency_contacts.clear()
+
+        for contact_data in emergency_contacts_data:
+            emergency_contact, created = EmergencyContact.objects.get_or_create(
+                **contact_data
+            )
+            instance.emergency_contacts.add(emergency_contact)
+
+        return instance
+
+
+class LifeHabitsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LifeHabits
+        fields = "__all__"
+
+
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = [
-            "email",
-            "first_name",
-            "last_name",
-            "gender",
-            "telephone",
-            "date_of_birth",
-        ]
+        fields = ["email", "first_name", "last_name", "gender"]
         extra_kwargs = {"email": {"required": True}}
 
     def validate_email(self, email):
@@ -68,34 +141,21 @@ class EmailAuthTokenSerializer(serializers.Serializer):
 
 
 class DoctorSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer()
-
     class Meta:
         model = Doctor
         fields = ["user", "specialty", "crm", "biography"]
 
-    def create(self, validated_data):
-        doctor = DoctorFacade()
-        return doctor.create_doctor(validated_data)
-
-    def update(self, instance, validated_data):
-        doctor = DoctorFacade()
-        return doctor.update_doctor(instance, validated_data)
-
 
 class AvailabilitySerializer(serializers.ModelSerializer):
     doctor_name = serializers.CharField(
-        source="id_professional.user.get_full_name", read_only=True
+        source="id_doctor.user.get_full_name", read_only=True
     )
-    specialty = serializers.CharField(
-        source="id_professional.specialty", read_only=True
-    )
+    specialty = serializers.CharField(source="id_doctor.specialty", read_only=True)
 
     class Meta:
         model = Availability
         fields = [
-            "id_availability",
-            "id_professional",
+            "id_doctor",
             "date",
             "start_time",
             "end_time",
