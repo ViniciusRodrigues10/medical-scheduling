@@ -2,12 +2,13 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import Doctor, Availability, Appointment
+from .models import AdditionalInformation, Doctor, Appointment
 from datetime import datetime, timedelta
 from django.db.models import Q
 from .serializers import (
-    AvailabilitySerializer,
-    UpdateAvailabilitySerializer,
+    AdditionalInformationSerializer,
+    LifeHabitsSerializer,
+    MedicalHistorySerializer,
     AppointmentSerializer,
 )
 from .facade.views_facade import (
@@ -49,6 +50,58 @@ def update_user_data(request):
 def delete_user_account(request):
     delete_user = UserPatientFacade
     return delete_user.delete_account(request)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def register_additional_information(request):
+    data = request.data
+    data["user"] = request.user.id_user
+
+    serializer = AdditionalInformationSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_medical_history(request):
+    data = request.data
+    data["id_user"] = request.user.id_user
+
+    serializer = MedicalHistorySerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+
+        try:
+            additional_info = AdditionalInformation.objects.get(user=request.user)
+            additional_info.completed_form = True
+            additional_info.save()
+
+        except AdditionalInformation.DoesNotExist:
+            return Response(
+                {"error": "Additional information not found for the user."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_life_habits(request):
+
+    data = request.data
+    data["id_user"] = request.user.id_user
+
+    serializer = LifeHabitsSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # TODO: Add restriction, only superuser and administrator can register doctors
@@ -157,7 +210,7 @@ def book_appointment(request):
     duration = timedelta(minutes=30)
     end_time = (datetime.combine(date, start_time) + duration).time()
 
-    doctor_id = doctor.user.id_user
+    doctor_id = doctor.adittional_info.id_user
     appointment_exists = (
         Appointment.objects.filter(id_professional=doctor_id, date=date)
         .filter(start_time__lt=end_time, end_time__gt=start_time)
