@@ -15,7 +15,17 @@ from ..serializers import (
 )
 
 
-class UserPatientFacade:
+class SingletonMeta(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            instance = super().__call__(*args, **kwargs)
+            cls._instances[cls] = instance
+        return cls._instances[cls]
+
+
+class UserPatientFacade(metaclass=SingletonMeta):
     def register_patiene(request):
         data = request.data.copy()
         data["user_type"] = 1
@@ -83,7 +93,7 @@ class UserPatientFacade:
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserDoctorFacade:
+class UserDoctorFacade(metaclass=SingletonMeta):
     def regiter_doctor(request):
         data = request.data.copy()
         user_data = {
@@ -271,7 +281,7 @@ class UserDoctorFacade:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LoginFacade:
+class LoginFacade(metaclass=SingletonMeta):
     def login(request):
         serializer = EmailAuthTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -295,7 +305,7 @@ class LoginFacade:
         )
 
 
-class AvailabilityFacade:
+class AvailabilityFacade(metaclass=SingletonMeta):
     def list_of_availability(request):
         data = request.data.copy()
         doctor_name = data.get("doctor_name", None)
