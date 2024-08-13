@@ -4,6 +4,7 @@ from knox.models import AuthToken
 from ..models import CustomUser, Doctor, Availability
 from django.db.models import Q
 from ..serializers import (
+    AdditionalInformationSerializer,
     CustomUserSerializer,
     EmailAuthTokenSerializer,
     UpdateAvailabilitySerializer,
@@ -32,8 +33,6 @@ class UserPatientFacade:
                     "first_name": user.first_name,
                     "last_name": user.last_name,
                     "gender": user.gender,
-                    "telephone": user.telephone,
-                    "date_of_birth": user.date_of_birth,
                     "user_type": user.user_type,
                 },
                 "token": token,
@@ -47,12 +46,11 @@ class UserPatientFacade:
         return Response(
             {
                 "user_info": {
+                    "id": user.id_user,
                     "email": user.email,
                     "first_name": user.first_name,
                     "last_name": user.last_name,
                     "gender": user.gender,
-                    "telephone": user.telephone,
-                    "date_of_birth": user.date_of_birth,
                 },
             },
             status=status.HTTP_200_OK,
@@ -87,35 +85,58 @@ class UserPatientFacade:
 class UserDoctorFacade:
     def regiter_doctor(request):
         data = request.data.copy()
-        data["user"]["user_type"] = 2
+        user_data = {
+            "email": data.get("email"),
+            "password": data.get("password"),
+            "first_name": data.get("first_name"),
+            "last_name": data.get("last_name"),
+            "gender": data.get("gender"),
+            "user_type": 2,
+        }
 
-        serializer = DoctorSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
+        additional_info_data = {
+            "telephone": data.get("telephone"),
+            "date_of_birth": data.get("date_of_birth"),
+            "is_staff": True,
+        }
 
-        doctor = serializer.save()
-        _, token = AuthToken.objects.create(doctor.user)
+        doctor_data = {
+            "specialty": data.get("specialty"),
+            "crm": data.get("crm"),
+            "biography": data.get("biography"),
+        }
 
-        return Response(
-            {
-                "user_info": {
-                    "id_user": doctor.user.id_user,
-                    "email": doctor.user.email,
-                    "first_name": doctor.user.first_name,
-                    "last_name": doctor.user.last_name,
-                    "gender": doctor.user.gender,
-                    "telephone": doctor.user.telephone,
-                    "date_of_birth": doctor.user.date_of_birth,
-                    "user_type": doctor.user.user_type,
-                },
-                "doctor_info": {
-                    "specialty": doctor.specialty,
-                    "crm": doctor.crm,
-                    "biography": doctor.biography,
-                },
-                "token": token,
-            },
-            status=status.HTTP_201_CREATED,
+        user_serializer = CustomUserSerializer(data=user_data)
+        if user_serializer.is_valid():
+            user = user_serializer.save()
+        else:
+            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        additional_info_data["user"] = user.id_user
+        additional_info_serializer = AdditionalInformationSerializer(
+            data=additional_info_data
         )
+        if additional_info_serializer.is_valid():
+            additional_info = additional_info_serializer.save()
+        else:
+            user.delete()
+            return Response(
+                additional_info_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        doctor_data["user"] = user.id_user
+        doctor_data["additional_info"] = additional_info.id
+        doctor_serializer = DoctorSerializer(data=doctor_data)
+        if doctor_serializer.is_valid():
+            doctor_serializer.save()
+            return Response(doctor_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+
+            additional_info.delete()
+            user.delete()
+            return Response(
+                doctor_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
 
     def get_data(request):
         try:
@@ -133,9 +154,11 @@ class UserDoctorFacade:
                     "first_name": doctor.user.first_name,
                     "last_name": doctor.user.last_name,
                     "gender": doctor.user.gender,
-                    "telephone": doctor.user.telephone,
-                    "date_of_birth": doctor.user.date_of_birth,
                     "user_type": doctor.user.user_type,
+                },
+                "additional_info": {
+                    "telephone": doctor.user.additional_info.telephone,
+                    "date_of_birth": doctor.user.additional_info.date_of_birth,
                 },
                 "doctor_info": {
                     "specialty": doctor.specialty,
@@ -149,17 +172,63 @@ class UserDoctorFacade:
     def update_data_doctor(request):
         try:
             doctor = Doctor.objects.get(user=request.user)
-        except CustomUser.DoesNotExist:
+        except Doctor.DoesNotExist:
             return Response(
                 {"error": "Doctor not found"}, status=status.HTTP_404_NOT_FOUND
             )
 
-        serializer = DoctorSerializer(doctor, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        data = request.data.copy()
+        user_data = {
+            "email": data.get("email", doctor.user.email),
+            "first_name": data.get("first_name", doctor.user.first_name),
+            "last_name": data.get("last_name", doctor.user.last_name),
+            "gender": data.get("gender", doctor.user.gender),
+            "is_staff": data.get("is_staff", doctor.user.is_staff),
+            "is_superuser": doctor.user.is_superuser,
+            "is_active": doctor.user.is_active,
+            "user_type": doctor.user.user_type,
+        }
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        additional_info_data = {
+            "telephone": data.get("telephone", doctor.user.additional_info.telephone),
+            "date_of_birth": data.get(
+                "date_of_birth", doctor.user.additional_info.date_of_birth
+            ),
+            "completed_form": doctor.user.additional_info.completed_form,
+        }
+
+        doctor_data = {
+            "specialty": data.get("specialty", doctor.specialty),
+            "crm": data.get("crm", doctor.crm),
+            "biography": data.get("biography", doctor.biography),
+        }
+
+        user_serializer = CustomUserSerializer(
+            doctor.user, data=user_data, partial=True
+        )
+        if user_serializer.is_valid():
+            user_serializer.save()
+        else:
+            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        additional_info_serializer = AdditionalInformationSerializer(
+            doctor.user.additional_info, data=additional_info_data, partial=True
+        )
+        if additional_info_serializer.is_valid():
+            additional_info_serializer.save()
+        else:
+            return Response(
+                additional_info_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        doctor_serializer = DoctorSerializer(doctor, data=doctor_data, partial=True)
+        if doctor_serializer.is_valid():
+            doctor_serializer.save()
+            return Response(doctor_serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                doctor_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
 
     def delete_account(request):
         try:
@@ -181,14 +250,24 @@ class UserDoctorFacade:
             return Response(serializer.data)
 
         elif request.method == "POST":
-            data = request.data.copy()
-            data["id_professional"] = Doctor.objects.get(user=request.user).pk
-            serializer = AvailabilitySerializer(data=data)
+            user = request.user
+            print("USER: ", user)
+            try:
+                doctor = Doctor.objects.get(user=user)
+            except Doctor.DoesNotExist:
+                return Response(
+                    {"error": "Doctor not found"}, status=status.HTTP_404_NOT_FOUND
+                )
 
+            data = request.data.copy()
+            data["id_doctor"] = doctor.pk
+
+            serializer = AvailabilitySerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginFacade:
@@ -207,8 +286,6 @@ class LoginFacade:
                     "first_name": user.first_name,
                     "last_name": user.last_name,
                     "gender": user.gender,
-                    "telephone": user.telephone,
-                    "date_of_birth": user.date_of_birth,
                     "user_type": user.user_type,
                 },
                 "token": token,
