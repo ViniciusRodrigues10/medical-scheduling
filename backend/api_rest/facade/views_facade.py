@@ -4,6 +4,7 @@ from rest_framework import status
 from knox.models import AuthToken
 from ..models import Appointment, CustomUser, Doctor, Availability
 from django.db.models import Q
+from ..singleton.singleton import SingletonMeta
 from ..serializers import (
     AdditionalInformationSerializer,
     CustomUserSerializer,
@@ -13,16 +14,6 @@ from ..serializers import (
     DoctorSerializer,
     AvailabilitySerializer,
 )
-
-
-class SingletonMeta(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            instance = super().__call__(*args, **kwargs)
-            cls._instances[cls] = instance
-        return cls._instances[cls]
 
 
 class UserPatientFacade(metaclass=SingletonMeta):
