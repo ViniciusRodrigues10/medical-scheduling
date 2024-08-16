@@ -12,6 +12,7 @@ from .serializers import (
     AppointmentSerializer,
 )
 from .facade.views_facade import (
+    AppointmentFacade,
     AvailabilityFacade,
     UserPatientFacade,
     UserDoctorFacade,
@@ -167,102 +168,12 @@ def delete_availability(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def book_appointment(request):
-    user = request.user
-    doctor_first_name = request.data.get("doctor_first_name")
-    doctor_last_name = request.data.get("doctor_last_name")
-    date_str = request.data.get("date")
-    start_time_str = request.data.get("start_time")
-
-    if (
-        not doctor_first_name
-        or not doctor_last_name
-        or not date_str
-        or not start_time_str
-    ):
-        return Response(
-            {
-                "error": "Doctor's first name, last name, date, and start time are required"
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    try:
-        doctor = Doctor.objects.get(
-            user__first_name=doctor_first_name, user__last_name=doctor_last_name
-        )
-    except Doctor.DoesNotExist:
-        return Response({"error": "Doctor not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    try:
-        date = datetime.strptime(date_str, "%Y-%m-%d").date()
-        start_time = datetime.strptime(start_time_str, "%H:%M:%S").time()
-        curret_date = datetime.today().date()
-        current_time = datetime.now().time()
-
-    except ValueError as e:
-        return Response({"error: str(e)"}, status=status.HTTP_400_BAD_REQUEST)
-
-    if date < curret_date:
-        return Response({"error": "Invalid date"}, status=status.HTTP_400_BAD_REQUEST)
-    if date == curret_date and start_time < current_time:
-        return Response({"error": "Invalid time"}, status=status.HTTP_400_BAD_REQUEST)
-
-    duration = timedelta(minutes=30)
-    end_time = (datetime.combine(date, start_time) + duration).time()
-
-    doctor_id = doctor.adittional_info.id_user
-    appointment_exists = (
-        Appointment.objects.filter(id_professional=doctor_id, date=date)
-        .filter(start_time__lt=end_time, end_time__gt=start_time)
-        .exists()
-    )
-
-    if appointment_exists:
-        return Response(
-            {"message": "The doctor is not available at the given date and time"},
-            status=status.HTTP_200_OK,
-        )
-
-    appointment = Appointment(
-        id_user=user,
-        id_professional=doctor,
-        date=date,
-        start_time=start_time,
-        end_time=end_time,
-    )
-    appointment.save()
-
-    serializer = AppointmentSerializer(appointment)
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    appointment = AppointmentFacade
+    return appointment.book(request)
 
 
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
 def delete_appointment(request):
-    user = request.user
-    date_str = request.data.get("date")
-    start_time_str = request.data.get("start_time")
-
-    if not date_str or not start_time_str:
-        return Response(
-            {"error": "Date and start time are required"},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    try:
-        date = datetime.strptime(date_str, "%Y-%m-%d").date()
-        start_time = datetime.strptime(start_time_str, "%H:%M:%S").time()
-    except ValueError:
-        return Response(
-            {"error": "Invalid date or time format"}, status=status.HTTP_400_BAD_REQUEST
-        )
-
-    try:
-        appointment = Appointment.objects.get(
-            id_user=user, date=date, start_time=start_time
-        )
-    except Appointment.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    appointment.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    appoitment = AppointmentFacade
+    return appoitment.delete(request)
