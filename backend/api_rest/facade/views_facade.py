@@ -7,6 +7,7 @@ from django.db.models import Q
 from ..singleton.singleton import SingletonMeta
 from ..serializers import (
     AdditionalInformationSerializer,
+    AppointmentSerializer,
     CustomUserSerializer,
     EmailAuthTokenSerializer,
     UpdateAvailabilitySerializer,
@@ -113,8 +114,8 @@ class UserDoctorFacade(metaclass=SingletonMeta):
             user = user_serializer.save()
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
         additional_info_data["user"] = user.id_user
+
         additional_info_serializer = AdditionalInformationSerializer(
             data=additional_info_data
         )
@@ -235,6 +236,7 @@ class UserDoctorFacade(metaclass=SingletonMeta):
     def delete_account(request):
         try:
             doctor = Doctor.objects.get(user=request.user)
+            print("@@___id user: ", doctor.user)
         except Doctor.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

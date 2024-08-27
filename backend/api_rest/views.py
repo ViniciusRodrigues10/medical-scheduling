@@ -1,15 +1,11 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import AdditionalInformation, Doctor, Appointment
-from datetime import datetime, timedelta
-from django.db.models import Q
+from .models import AdditionalInformation
 from .serializers import (
     AdditionalInformationSerializer,
     LifeHabitsSerializer,
     MedicalHistorySerializer,
-    AppointmentSerializer,
 )
 from .facade.views_facade import (
     AppointmentFacade,
@@ -18,6 +14,7 @@ from .facade.views_facade import (
     UserDoctorFacade,
     LoginFacade,
 )
+from .decorator.decorators import login_required_custom
 
 
 @api_view(["POST"])
@@ -33,28 +30,28 @@ def login_api(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def get_user_data(request):
     data_user = UserPatientFacade
     return data_user.get_data(request)
 
 
 @api_view(["PUT"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def update_user_data(request):
     update_user = UserPatientFacade
     return update_user.update_data_user(request)
 
 
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def delete_user_account(request):
     delete_user = UserPatientFacade
     return delete_user.delete_account(request)
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def register_additional_information(request):
     data = request.data
     data["user"] = request.user.id_user
@@ -67,7 +64,7 @@ def register_additional_information(request):
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def create_medical_history(request):
     data = request.data
     data["id_user"] = request.user.id_user
@@ -92,7 +89,7 @@ def create_medical_history(request):
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def create_life_habits(request):
 
     data = request.data
@@ -113,14 +110,14 @@ def register_doctor(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def get_doctor_data(request):
     doctor = UserDoctorFacade
     return doctor.get_data(request)
 
 
 @api_view(["PUT"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def update_doctor_data(request):
     doctor = UserDoctorFacade
     return doctor.update_data_doctor(request)
@@ -128,7 +125,7 @@ def update_doctor_data(request):
 
 # TODO: add restriction, only superuser and admin can delete doctors
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def delete_doctor_account(request):
     doctor = UserDoctorFacade
     return doctor.delete_account(request)
@@ -137,7 +134,7 @@ def delete_doctor_account(request):
 # TODO: possibly remove the GET
 # add valid time checks, do not allow adding past days and times
 @api_view(["GET", "POST"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def availability_list_create(request):
     doctor = UserDoctorFacade
     return doctor.availability(request)
@@ -145,35 +142,35 @@ def availability_list_create(request):
 
 # TODO: When a user makes an appointment, you must update the availability list
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def availability_list(request):
     availability = AvailabilityFacade
     return availability.list_of_availability(request)
 
 
 @api_view(["PUT"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def update_availability(request):
     availability = AvailabilityFacade
     return availability.update(request)
 
 
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def delete_availability(request):
     availability = AvailabilityFacade
     return availability.delete(request)
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def book_appointment(request):
     appointment = AppointmentFacade
     return appointment.book(request)
 
 
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+@login_required_custom
 def delete_appointment(request):
     appoitment = AppointmentFacade
     return appoitment.delete(request)
