@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "knox",
     "api_rest.apps.ApiRestConfig",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -51,7 +52,12 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "api_rest.middleware.LogMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
+
+REST_FRAMEWORK = {"DEFAULT_PERMISSION_CLASSES": ["rest_framework.permission.AllowAny"]}
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 AUTH_USER_MODEL = "api_rest.CustomUser"
 
