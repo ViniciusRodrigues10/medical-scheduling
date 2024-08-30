@@ -14,7 +14,10 @@ from .facade.views_facade import (
     UserDoctorFacade,
     LoginFacade,
 )
-from .decorator.decorators import login_required_custom
+from .decorator.decorators import login_required_custom, log_request
+from .singleton.singleton import RequestLogger
+
+logger = RequestLogger()
 
 
 @api_view(["POST"])
@@ -24,6 +27,7 @@ def register_patient_api(request):
 
 
 @api_view(["POST"])
+@log_request(logger)
 def login_api(request):
     view_login = LoginFacade
     return view_login.login(request)
