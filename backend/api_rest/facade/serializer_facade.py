@@ -8,6 +8,10 @@ from ..factories.serializer_factories import (
     ValidadeLoginFactory,
     SerializerDoctorFactory,
 )
+from ..singleton.singleton import RequestLogger
+from ..decorator.decorators import log_request
+
+logger = RequestLogger()
 
 
 class UserCreatorFacade(SerializerUserFactory):
@@ -41,6 +45,7 @@ class ValidateEmailForRegistrationFacade(ValidateEmailForRegistrationFactory):
         return email
 
 
+@log_request(logger)
 class ValidateLoginFacade(ValidadeLoginFactory):
     def __init__(self, attrs, context):
         self.attrs = attrs
@@ -49,6 +54,7 @@ class ValidateLoginFacade(ValidadeLoginFactory):
         self.password = self.attrs.get("password")
         self.user = None
 
+    @log_request(logger)
     def validate(self):
         if self.email and self.password:
             self.user = authenticate(
