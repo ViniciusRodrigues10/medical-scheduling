@@ -1,0 +1,121 @@
+[2024-08-27 20:53:43] Starting request: /api/login/
+[2024-08-27 20:53:43] Entering login_api
+[2024-08-27 20:53:43] Entering login
+[2024-08-27 20:53:43] Entering EmailAuthTokenSerializer
+[2024-08-27 20:53:43] Exiting EmailAuthTokenSerializer
+[2024-08-27 20:53:43] Entering validate
+[2024-08-27 20:53:43] Entering ValidateLoginFacade
+[2024-08-27 20:53:43] Exiting ValidateLoginFacade
+[2024-08-27 20:53:43] Entering validate
+[2024-08-27 20:53:44] Exiting validate
+[2024-08-27 20:53:44] Exiting validate
+[2024-08-27 20:53:45] Exiting login
+[2024-08-27 20:53:45] Exiting login_api
+[2024-08-27 20:53:45] Finished request: /api/login/
+[2024-08-30 14:39:30] Starting request: /
+[2024-08-30 14:39:30] Finished request: /
+[2024-08-30 14:39:31] Starting request: /favicon.ico
+[2024-08-30 14:39:31] Finished request: /favicon.ico
+[2024-08-30 14:39:40] Starting request: /api/
+[2024-08-30 14:39:40] Finished request: /api/
+[2024-08-30 14:40:01] Starting request: /api/login
+[2024-08-30 14:40:01] Finished request: /api/login
+[2024-08-30 14:40:01] Starting request: /api/login/
+[2024-08-30 14:40:01] Finished request: /api/login/
+[2024-08-30 14:40:20] Starting request: /api/login/
+[2024-08-30 14:40:20] Entering login_api
+[2024-08-30 14:40:20] Entering login
+[2024-08-30 14:40:20] Entering EmailAuthTokenSerializer
+[2024-08-30 14:40:20] Exiting EmailAuthTokenSerializer
+[2024-08-30 14:40:20] Entering validate
+[2024-08-30 14:40:20] Entering ValidateLoginFacade
+[2024-08-30 14:40:20] Exiting ValidateLoginFacade
+[2024-08-30 14:40:20] Entering validate
+[2024-08-30 14:40:21] Exiting validate
+[2024-08-30 14:40:21] Exiting validate
+[2024-08-30 14:40:21] Exiting login
+[2024-08-30 14:40:21] Exiting login_api
+[2024-08-30 14:40:21] Finished request: /api/login/
+[2024-08-30 14:54:51] Starting request: /api/user
+[2024-08-30 14:54:51] Starting request: /api/user
+[2024-08-30 14:54:51] Finished request: /api/user
+[2024-08-30 14:54:51] Starting request: /api/user
+[2024-08-30 14:54:51] Starting request: /api/user
+[2024-08-30 14:54:51] Finished request: /api/user
+[2024-08-30 14:54:51] Finished request: /api/user
+[2024-08-30 14:55:21] Starting request: /api/login
+[2024-08-30 14:55:21] Finished request: /api/login
+[2024-08-30 14:58:19] Starting request: /api/user
+[2024-08-30 14:58:19] Starting request: /api/user
+[2024-08-30 14:58:19] Finished request: /api/user
+[2024-08-30 14:58:34] Starting request: /api/login
+[2024-08-30 14:58:34] Finished request: /api/login
+[2024-08-30 15:00:45] Starting request: /api/user
+[2024-08-30 15:00:45] Starting request: /api/user
+[2024-08-30 15:00:45] Finished request: /api/user
+[2024-08-30 15:00:45] Finished request: /api/user
+[2024-08-30 15:01:42] Starting request: /api/user
+[2024-08-30 15:01:42] Finished request: /api/user
+[2024-08-30 15:02:27] Starting request: /api/login
+[2024-08-30 15:02:27] Finished request: /api/login
+[2024-08-30 15:03:13] Starting request: /api/login
+[2024-08-30 15:03:13] Finished request: /api/login
+[2024-08-30 15:03:56] Starting request: /api/
+[2024-08-30 15:03:56] Finished request: /api/
+[2024-08-30 15:03:58] Starting request: /api/
+[2024-08-30 15:03:58] Starting request: /api/
+[2024-08-30 15:03:58] Finished request: /api/
+[2024-08-30 15:03:59] Finished request: /api/
+[2024-08-30 15:04:12] Starting request: /api/login
+[2024-08-30 15:04:12] Finished request: /api/login
+[2024-08-30 15:04:30] Starting request: /api/login
+[2024-08-30 15:04:30] Finished request: /api/login
+[2024-08-30 15:04:42] Starting request: /api/login
+[2024-08-30 15:04:43] Starting request: /api/login
+[2024-08-30 15:04:43] Finished request: /api/login
+[2024-08-30 15:04:42] Starting request: /api/login
+[2024-08-30 15:04:43] Starting request: /api/login
+[2024-08-30 15:04:43] Finished request: /api/login
+[2024-08-30 15:04:43] Finished request: /api/login
+[2024-08-30 15:04:58] Starting request: /api/login
+[2024-08-30 15:04:58] Finished request: /api/login
+[2024-08-30 15:05:35] Starting request: /api/login
+[2024-08-30 15:05:35] Starting request: /api/login
+[2024-08-30 15:05:35] Finished request: /api/login
+[2024-08-30 15:05:35] Finished request: /api/login
+[2024-08-30 15:05:46] Starting request: /api/login
+[2024-08-30 15:05:46] Finished request: /api/login
+[2024-08-30 15:17:02] Starting request: /
+[2024-08-30 15:17:02] Finished request: /
+[2024-08-30 15:17:11] Starting request: /login/
+[2024-08-30 15:17:11] Finished request: /login/
+[2024-08-30 15:17:19] Starting request: /api/login/
+[2024-08-30 15:17:19] Finished request: /api/login/
+[2024-08-30 15:18:14] Starting request: /api/login/
+[2024-08-30 15:18:14] Entering login_api
+[2024-08-30 15:18:14] Entering login
+[2024-08-30 15:18:14] Entering EmailAuthTokenSerializer
+[2024-08-30 15:18:14] Exiting EmailAuthTokenSerializer
+[2024-08-30 15:18:14] Finished request: /api/login/
+[2024-08-30 15:33:14] Starting request: /api/login/
+[2024-08-30 15:33:14] Finished request: /api/login/
+[2024-08-30 15:34:46] Starting request: /api/login/
+[2024-08-30 15:34:46] Finished request: /api/login/
+[2024-08-30 15:36:29] Starting request: /api/login/
+[2024-08-30 15:36:29] Finished request: /api/login/
+[2024-08-30 15:36:31] Starting request: /api/login/
+[2024-08-30 15:36:31] Finished request: /api/login/
+[2024-08-30 15:36:31] Starting request: /api/login/
+[2024-08-30 15:36:31] Finished request: /api/login/
+[2024-08-30 15:36:31] Starting request: /api/login/
+[2024-08-30 15:36:31] Finished request: /api/login/
+[2024-08-30 15:36:31] Starting request: /api/login/
+[2024-08-30 15:36:31] Finished request: /api/login/
+[2024-08-30 15:36:32] Starting request: /api/login/
+[2024-08-30 15:36:32] Finished request: /api/login/
+[2024-08-30 15:36:32] Starting request: /api/login/
+[2024-08-30 15:36:32] Finished request: /api/login/
+[2024-08-30 15:37:04] Starting request: /api/login/
+[2024-08-30 15:37:04] Finished request: /api/login/
+[2024-08-30 15:37:05] Starting request: /api/login/
+[2024-08-30 15:37:05] Finished request: /api/login/

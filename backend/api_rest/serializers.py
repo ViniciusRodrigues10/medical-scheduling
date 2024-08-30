@@ -14,6 +14,10 @@ from .facade.serializer_facade import (
     ValidateEmailForRegistrationFacade,
     ValidateLoginFacade,
 )
+from .singleton.singleton import RequestLogger
+from .decorator.decorators import log_request
+
+logger = RequestLogger()
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -131,10 +135,12 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return email_validator.evaluates_whether_email_is_in_use(email)
 
 
+@log_request(logger)
 class EmailAuthTokenSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
 
+    @log_request(logger)
     def validate(self, attrs):
         validate_login = ValidateLoginFacade(attrs, self.context)
         return validate_login.validate()

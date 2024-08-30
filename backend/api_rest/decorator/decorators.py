@@ -29,3 +29,17 @@ def login_required_custom(function):
             return HttpResponseForbidden("Você não está logado")
 
     return wrap
+
+
+def log_request(logger):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            logger.log(f"Entering {func.__name__}")
+            response = func(*args, **kwargs)
+            logger.log(f"Exiting {func.__name__}")
+            return response
+
+        return wrapper
+
+    return decorator

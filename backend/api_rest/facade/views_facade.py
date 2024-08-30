@@ -15,6 +15,10 @@ from ..serializers import (
     DoctorSerializer,
     AvailabilitySerializer,
 )
+from ..singleton.singleton import RequestLogger
+from ..decorator.decorators import log_request
+
+logger = RequestLogger()
 
 
 class UserPatientFacade(metaclass=SingletonMeta):
@@ -275,6 +279,7 @@ class UserDoctorFacade(metaclass=SingletonMeta):
 
 
 class LoginFacade(metaclass=SingletonMeta):
+    @log_request(logger)
     def login(request):
         serializer = EmailAuthTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
