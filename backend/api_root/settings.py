@@ -59,6 +59,13 @@ REST_FRAMEWORK = {"DEFAULT_PERMISSION_CLASSES": ["rest_framework.permission.Allo
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Adicione o URL do seu front-end aqui
+]
+
+# Se você estiver usando cookies ou outras credenciais
+CORS_ALLOW_CREDENTIALS = True
+
 AUTH_USER_MODEL = "api_rest.CustomUser"
 
 AUTHENTICATION_BACKENDS = [
