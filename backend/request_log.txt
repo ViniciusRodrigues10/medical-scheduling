@@ -119,3 +119,121 @@
 [2024-08-30 15:37:04] Finished request: /api/login/
 [2024-08-30 15:37:05] Starting request: /api/login/
 [2024-08-30 15:37:05] Finished request: /api/login/
+[2024-09-04 20:07:41] Starting request: /api/login/
+[2024-09-04 20:07:41] Finished request: /api/login/
+[2024-09-04 20:07:41] Starting request: /api/login/
+[2024-09-04 20:07:41] Entering login_api
+[2024-09-04 20:07:41] Entering login
+[2024-09-04 20:07:41] Entering EmailAuthTokenSerializer
+[2024-09-04 20:07:41] Exiting EmailAuthTokenSerializer
+[2024-09-04 20:07:41] Entering validate
+[2024-09-04 20:07:41] Entering ValidateLoginFacade
+[2024-09-04 20:07:41] Exiting ValidateLoginFacade
+[2024-09-04 20:07:41] Entering validate
+[2024-09-04 20:07:42] Exiting validate
+[2024-09-04 20:07:42] Exiting validate
+[2024-09-04 20:07:42] Exiting login
+[2024-09-04 20:07:42] Exiting login_api
+[2024-09-04 20:07:42] Finished request: /api/login/
+[2024-09-04 20:09:15] Starting request: /api/login/
+[2024-09-04 20:09:15] Finished request: /api/login/
+[2024-09-04 20:09:15] Starting request: /api/login/
+[2024-09-04 20:09:15] Entering login_api
+[2024-09-04 20:09:15] Entering login
+[2024-09-04 20:09:15] Entering EmailAuthTokenSerializer
+[2024-09-04 20:09:15] Exiting EmailAuthTokenSerializer
+[2024-09-04 20:09:15] Entering validate
+[2024-09-04 20:09:15] Entering ValidateLoginFacade
+[2024-09-04 20:09:15] Exiting ValidateLoginFacade
+[2024-09-04 20:09:15] Entering validate
+[2024-09-04 20:09:16] Exiting validate
+[2024-09-04 20:09:16] Exiting validate
+[2024-09-04 20:09:16] Exiting login
+[2024-09-04 20:09:16] Exiting login_api
+[2024-09-04 20:09:16] Finished request: /api/login/
+[2024-09-04 20:10:13] Starting request: /api/login/
+[2024-09-04 20:10:13] Entering login_api
+[2024-09-04 20:10:13] Entering login
+[2024-09-04 20:10:13] Entering EmailAuthTokenSerializer
+[2024-09-04 20:10:13] Exiting EmailAuthTokenSerializer
+[2024-09-04 20:10:13] Entering validate
+[2024-09-04 20:10:13] Entering ValidateLoginFacade
+[2024-09-04 20:10:13] Exiting ValidateLoginFacade
+[2024-09-04 20:10:13] Entering validate
+[2024-09-04 20:10:14] Exiting validate
+[2024-09-04 20:10:14] Exiting validate
+[2024-09-04 20:10:14] Exiting login
+[2024-09-04 20:10:14] Exiting login_api
+[2024-09-04 20:10:14] Finished request: /api/login/
+[2024-09-04 21:05:41] Starting request: /api/register-patient/
+[2024-09-04 21:05:41] Finished request: /api/register-patient/
+[2024-09-04 21:07:08] Starting request: /api/register-patient/
+[2024-09-04 21:07:08] Finished request: /api/register-patient/
+[2024-09-04 21:07:09] Starting request: /api/register-patient/
+[2024-09-04 21:07:09] Finished request: /api/register-patient/
+[2024-09-04 21:07:29] Starting request: /api/register-patient/
+[2024-09-04 21:07:29] Finished request: /api/register-patient/
+[2024-09-04 21:08:42] Starting request: /api/register-patient/
+[2024-09-04 21:08:42] Finished request: /api/register-patient/
+[2024-09-04 21:08:43] Starting request: /api/register-patient/
+[2024-09-04 21:08:43] Finished request: /api/register-patient/
+[2024-09-04 21:08:43] Starting request: /api/register-patient/
+[2024-09-04 21:08:43] Finished request: /api/register-patient/
+[2024-09-04 21:08:43] Starting request: /api/register-patient/
+[2024-09-04 21:08:43] Finished request: /api/register-patient/
+[2024-09-04 21:08:44] Starting request: /api/register-patient/
+[2024-09-04 21:08:44] Finished request: /api/register-patient/
+[2024-09-04 21:08:44] Starting request: /api/register-patient/
+[2024-09-04 21:08:44] Finished request: /api/register-patient/
+[2024-09-04 21:08:45] Starting request: /api/register-patient/
+[2024-09-04 21:08:45] Finished request: /api/register-patient/
+[2024-09-04 21:12:13] Starting request: /api/register-patient/
+[2024-09-04 21:12:13] Finished request: /api/register-patient/
+[2024-09-04 21:15:57] Starting request: /api/register-patient/
+[2024-09-04 21:15:57] Finished request: /api/register-patient/
+[2024-09-04 21:16:38] Starting request: /api/register-patient/
+[2024-09-04 21:16:38] Finished request: /api/register-patient/
+[2024-09-04 21:20:21] Starting request: /api/register-patient/
+[2024-09-04 21:20:21] Finished request: /api/register-patient/
+[2024-09-04 21:20:21] Starting request: /api/register-patient/
+[2024-09-04 21:20:21] Finished request: /api/register-patient/
+[2024-09-04 21:20:21] Starting request: /api/register-patient/
+[2024-09-04 21:20:21] Finished request: /api/register-patient/
+[2024-09-04 21:20:21] Starting request: /api/register-patient/
+[2024-09-04 21:20:21] Finished request: /api/register-patient/
+[2024-09-04 21:20:22] Starting request: /api/register-patient/
+[2024-09-04 21:20:22] Finished request: /api/register-patient/
+[2024-09-04 21:20:22] Starting request: /api/register-patient/
+[2024-09-04 21:20:22] Finished request: /api/register-patient/
+[2024-09-04 21:20:38] Starting request: /api/register-patient/
+[2024-09-04 21:20:38] Finished request: /api/register-patient/
+[2024-09-04 21:22:52] Starting request: /api/register-patient/
+[2024-09-04 21:22:52] Finished request: /api/register-patient/
+[2024-09-04 21:22:52] Starting request: /api/register-patient/
+[2024-09-04 21:22:52] Finished request: /api/register-patient/
+[2024-09-04 21:34:50] Starting request: /api/register-patient/
+[2024-09-04 21:34:51] Finished request: /api/register-patient/
+[2024-09-04 21:41:21] Starting request: /api/register-patient/
+[2024-09-04 21:41:22] Finished request: /api/register-patient/
+[2024-09-04 21:50:36] Starting request: /api/register-patient/
+[2024-09-04 21:50:37] Finished request: /api/register-patient/
+[2024-09-04 21:51:04] Starting request: /api/login/
+[2024-09-04 21:51:04] Entering login_api
+[2024-09-04 21:51:04] Entering login
+[2024-09-04 21:51:04] Entering EmailAuthTokenSerializer
+[2024-09-04 21:51:04] Exiting EmailAuthTokenSerializer
+[2024-09-04 21:51:04] Finished request: /api/login/
+[2024-09-04 21:51:43] Starting request: /api/login/
+[2024-09-04 21:51:43] Entering login_api
+[2024-09-04 21:51:43] Entering login
+[2024-09-04 21:51:43] Entering EmailAuthTokenSerializer
+[2024-09-04 21:51:43] Exiting EmailAuthTokenSerializer
+[2024-09-04 21:51:43] Entering validate
+[2024-09-04 21:51:43] Entering ValidateLoginFacade
+[2024-09-04 21:51:43] Exiting ValidateLoginFacade
+[2024-09-04 21:51:43] Entering validate
+[2024-09-04 21:51:43] Exiting validate
+[2024-09-04 21:51:43] Exiting validate
+[2024-09-04 21:51:43] Exiting login
+[2024-09-04 21:51:43] Exiting login_api
+[2024-09-04 21:51:43] Finished request: /api/login/

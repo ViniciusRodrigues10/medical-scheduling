@@ -1,0 +1,112 @@
+body {
+    background-image: url('../img/telafundohome.jpeg');
+    background-size: cover; /* Faz com que a imagem cubra toda a área */
+    background-position: center center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita repetição da imagem */
+    background-attachment: fixed; /* Mantém a imagem fixa durante o rolar */
+}
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Para evitar rolagem se necessário */
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+}
+
+.navbar {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+}
+
+.navbar .nav-link {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.navbar .nav-link:hover {
+    text-decoration: underline;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Para posicionar o painel de fundo */
+}
+
+.background-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1; /* Para ficar atrás do conteúdo */
+}
+
+.white-panel {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 36px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    /* Defina um tamanho mínimo se necessário */
+    min-width: 300px;
+}
+
+
+.logo img {
+    width: 23vw; /* Ajuste a largura conforme necessário */
+    max-width: 500px; /* Limite máximo de largura */
+    height: auto; /* Mantém a proporção */
+    margin-bottom: 70px;
+    /* Remova o display block se não precisar */
+}
+
+
+
+
+.btn-entrar {
+    width: 100%;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.btn-entrar:hover {
+    background-color: #004494;
+}
+
+.link-criar-conta {
+    color: #0056b3;
+    text-decoration: none;
+    font-size: 19px;
+    margin-top: 20px;
+}
+
+.link-criar-conta:hover {
+    text-decoration: underline;
+}

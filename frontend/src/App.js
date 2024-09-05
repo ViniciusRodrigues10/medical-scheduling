@@ -57,16 +57,36 @@ const HomePage = () => {
 
 export default HomePage;*/
 
+// import React from 'react';
+// import Login from './Login';
+
+// function App() {
+//   return (
+//     <div className="App">
+//       <Login />
+//     </div>
+//   );
+// }
+
+// export default App;
+
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './components/home'; 
+import RegisterPatient from './components/registerPatient';
 import Login from './Login';
+// import Home from './components/Home'; // Exemplo de outra página
 
 function App() {
   return (
-    <div className="App">
-      <Login />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/register" element={<RegisterPatient />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 
 export default App;
-
