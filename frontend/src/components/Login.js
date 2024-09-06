@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './App.css'; // Importa o CSS
+import { useNavigate } from 'react-router-dom';
+import './../App.css'; // Importa o CSS
 import axios from "axios";
 
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -51,7 +52,7 @@ const Login = () => {
             <div className="login-box">
                 <div className='content'>
                     <div className="logo">
-                        <img src={require("./_assets/img/logo.medical.jpeg")} alt="Saúde Now" className="logo"/>
+                        <img src={require("./../_assets/img/logo.medical.jpeg")} alt="Saúde Now" className="logo"/>
                     </div>
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">
@@ -73,7 +74,7 @@ const Login = () => {
                         />
                     </div>
                     <div className="link-group">
-                        <a href="/register">Não é cadastrado? Clique aqui</a>
+                        <a href="/escolha">Não é cadastrado? Clique aqui</a>
                     </div>
                     <button type="submit" className="login-button">Entrar</button>
                 </form>
