@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './../App.css'; // Importa o CSS
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -11,6 +11,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,9 +33,9 @@ const Login = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                // Supondo que o backend retorne um token JWT
-                localStorage.setItem('token', data.token);
-                // Redirecione para outra página ou faça outra ação
+                const token = data.token;
+                localStorage.setItem('token', token);
+                navigate('/perfil'); // Certifique-se de que esta rota está correta no seu roteador
                 console.log('Login realizado com sucesso!');
             } else {
                 const errorData = await response.json();
