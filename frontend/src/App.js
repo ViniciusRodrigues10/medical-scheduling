@@ -75,14 +75,16 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/home'; 
 import RegisterPatient from './components/registerPatient';
 import Login from './Login';
+import RegisterDoctor from './components/RegisterDoctor';
 // import Home from './components/Home'; // Exemplo de outra página
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/register" element={<RegisterPatient />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/cadostro-paciente" element={<RegisterPatient />} />
+        <Route path="/cadastro-medico" element={<RegisterDoctor />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
