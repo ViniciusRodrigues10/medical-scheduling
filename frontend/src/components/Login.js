@@ -52,7 +52,7 @@ const Login = () => {
             <div className="login-box">
                 <div className='content'>
                     <div className="logo">
-                        <img src={require("./../_assets/img/logo.medical.jpeg")} alt="Saúde Now" className="logo"/>
+                        <img src={require("./../_assets/img/logo.png")} alt="Saúde Now" className="logo"/>
                     </div>
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">

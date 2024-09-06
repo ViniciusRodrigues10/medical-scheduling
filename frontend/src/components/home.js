@@ -22,7 +22,7 @@ const HomePage = () => {
         <div className="background-panel"></div>
         <div className="white-panel">
           <div className="logo">
-            <img src={require('../_assets/img/logo.medical.jpeg')} alt="Saúde Now" className="logo" />
+            <img src={require('../_assets/img/logo.png')} alt="Saúde Now" className="logo" />
           </div>
           <button className="btn-entrar" onClick={handleLoginClick}>Entrar</button>
           <p>OU</p>

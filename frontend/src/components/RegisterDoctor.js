@@ -65,7 +65,7 @@ const RegisterDoctor = () => {
       <div className="register-box">
         <div className="content">
           <div className="logo">
-            <img src={require("../_assets/img/logo.medical.jpeg")} alt="Saúde Now" />
+            <img src={require("../_assets/img/logo.png")} alt="Saúde Now" />
           </div>
           <form onSubmit={handleSubmit}>
             <div className="input-group">
