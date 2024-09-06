@@ -9,6 +9,10 @@ const HomePage = () => {
     navigate('/login');
   };
 
+  const handleRegisterClick = () => {
+    navigate('/register');
+  };
+
   return (
     <div className="container">
       <nav className="navbar">
@@ -23,7 +27,7 @@ const HomePage = () => {
           </div>
           <button className="btn-entrar" onClick={handleLoginClick}>Entrar</button>
           <p>OU</p>
-          <a href="#criar-conta" className="link-criar-conta">Criar Conta</a>
+          <a href="#criar-conta" className="link-criar-conta" onClick={handleRegisterClick}>Criar Conta</a>
         </div>
       </div>
     </div>
