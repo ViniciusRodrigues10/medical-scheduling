@@ -19,7 +19,7 @@ const HomePage = () => {
         <a href="/medicos" className="nav-link">Nossos Médicos</a>
       </nav>
       <div className="content">
-        <div className="background-panel"></div> {/* Adicionando fundo branco esbranquiçado */}
+        <div className="background-panel"></div>
         <div className="white-panel">
           <div className="logo">
             <img src={require('../_assets/img/logo.medical.jpeg')} alt="Saúde Now" className="logo" />
