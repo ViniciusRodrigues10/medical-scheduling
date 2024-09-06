@@ -8,17 +8,17 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
 
-const Escolha = () => {
+const Choice = () => {
   const navigate = useNavigate();
 
   const handleChoicePatientClick = () => {
-    navigate('/login')
+    navigate('/cadastro-paciente')
   }
 
   const handleChoiceDoctorClick = () => {
-    navigate('/login')
+    navigate('/cadastro-medico')
   }
-  
+
   return (
     <div className="escolha-container">
       {/* Opção Médico */}
@@ -39,4 +39,4 @@ const Escolha = () => {
   );
 };
 
-export default Escolha;
+export default Choice;

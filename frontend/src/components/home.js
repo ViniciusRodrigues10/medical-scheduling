@@ -8,8 +8,8 @@ const HomePage = () => {
   const handleLoginClick = () => {
     navigate('/login');
   };
-  const handleCreatAccountClick = () => {
-    navigate('/Choice')
+  const handleCreatAccountClick = () => { 
+    navigate('/escolha')
   }
 
   return (

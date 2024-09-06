@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './../App.css'; // Importa o CSS
 import axios from "axios";
 
@@ -73,7 +74,7 @@ const Login = () => {
                         />
                     </div>
                     <div className="link-group">
-                        <a href="/register">Não é cadastrado? Clique aqui</a>
+                        <a href="/escolha">Não é cadastrado? Clique aqui</a>
                     </div>
                     <button type="submit" className="login-button">Entrar</button>
                 </form>
