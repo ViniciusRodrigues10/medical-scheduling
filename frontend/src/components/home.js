@@ -8,6 +8,9 @@ const HomePage = () => {
   const handleLoginClick = () => {
     navigate('/login');
   };
+  const handleCreatAccountClick = () => {
+    navigate('/Choice')
+  }
 
   return (
     <div className="container">
@@ -23,7 +26,7 @@ const HomePage = () => {
           </div>
           <button className="btn-entrar" onClick={handleLoginClick}>Entrar</button>
           <p>OU</p>
-          <a href="#criar-conta" className="link-criar-conta">Criar Conta</a>
+          <a href="#criar-conta" className="link-criar-conta" onClick={handleCreatAccountClick}>Criar Conta</a>
         </div>
       </div>
     </div>

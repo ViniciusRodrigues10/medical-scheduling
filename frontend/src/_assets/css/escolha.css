@@ -1,0 +1,55 @@
+/* escolha.css */
+
+.escolha-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0; /* Remove o gap extra */
+    padding: 20px;
+    height: 90vh; /* Faz com que o container ocupe toda a altura da tela */
+  }
+  
+  .escolha-opcao {
+    flex: 1; /* Cada opção ocupa 50% do espaço disponível */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 100%; /* Ocupa toda a altura do container */
+  }
+  
+  .escolha-imagem {
+    height: 600px; /* Altura fixa */
+    width: auto; /* Ajusta a largura proporcionalmente */
+    border-radius: 30px;
+    object-fit: cover; /* Para preencher o espaço da altura definida */
+  }
+  
+  
+  .escolha-botao {
+    margin-top: 20px;
+    padding: 15px 50px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 17px;
+    font-size: 18px;
+    cursor: pointer;
+    align-self: center; /* Centraliza o botão abaixo da imagem */
+  }
+  
+  .escolha-botao:hover {
+    background-color: #0056b3;
+  }
+  
+  .escolha-ou {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
