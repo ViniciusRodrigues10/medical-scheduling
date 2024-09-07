@@ -9,6 +9,7 @@ const MedicalHistoryFormPage = () => {
   const [surgeries, setSurgeries] = useState('');
   const [familyHistory, setFamilyHistory] = useState('');
   const [bloodType, setBloodType] = useState('');
+  const [healthPlan, setHealthPlan] = useState('');
   const [emergencyContacts, setEmergencyContacts] = useState([
     { name: '', phone_number: '' },
     { name: '', phone_number: '' },
@@ -30,6 +31,7 @@ const MedicalHistoryFormPage = () => {
       surgeries: surgeries,
       family_history: familyHistory,
       blood_type: bloodType,
+      health_plan: healthPlan,
       emergency_contacts: emergencyContacts,
     };
 
@@ -94,6 +96,15 @@ const MedicalHistoryFormPage = () => {
               type="text"
               value={bloodType}
               onChange={(e) => setBloodType(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Plano de Saude:</label>
+            <input
+              type="text"
+              value={healthPlan}
+              onChange={(e) => setHealthPlan(e.target.value)}
               required
             />
           </div>

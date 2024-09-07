@@ -77,6 +77,7 @@ class MedicalHistorySerializer(serializers.ModelSerializer):
             "allergies",
             "surgeries",
             "family_history",
+            "health_plan",
             "blood_type",
             "emergency_contacts",
         ]

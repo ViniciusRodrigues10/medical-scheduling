@@ -77,17 +77,6 @@ def create_medical_history(request):
     if serializer.is_valid():
         serializer.save()
 
-        try:
-            additional_info = AdditionalInformation.objects.get(user=request.user)
-            additional_info.completed_form = True
-            additional_info.save()
-
-        except AdditionalInformation.DoesNotExist:
-            return Response(
-                {"error": "Additional information not found for the user."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
