@@ -1,6 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+
+from .command.views_command import BookAppointmentCommand, DeleteAppointmentCommand
 from .models import AdditionalInformation
 from .serializers import (
     AdditionalInformationSerializer,
@@ -158,12 +160,12 @@ def delete_availability(request):
 @api_view(["POST"])
 @login_required_custom
 def book_appointment(request):
-    appointment = AppointmentFacade
-    return appointment.book(request)
-
+    command = BookAppointmentCommand(AppointmentFacade, request)
+    return command.execute()
 
 @api_view(["DELETE"])
 @login_required_custom
 def delete_appointment(request):
-    appoitment = AppointmentFacade
-    return appoitment.delete(request)
+    command = DeleteAppointmentCommand(AppointmentFacade, request)
+    return command.execute()
+
