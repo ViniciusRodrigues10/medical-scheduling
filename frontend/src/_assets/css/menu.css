@@ -48,6 +48,17 @@ body {
   border-radius: 10px 0 0 10px; /* Arredonda apenas os cantos esquerdo */
   width: 100%;
   justify-content: start;
+  transition: background-color 0.3s; /* Transição suave ao passar o mouse */
+}
+
+/* Efeito hover para os itens do menu */
+.menu-item:hover {
+  background-color: #979797; /* Cor de fundo mais escura ao passar o mouse */
+}
+
+.menu-item.active {
+  background-color: #979797; /* Cor de fundo mais escura para o item ativo */
+  transform: scale(1.07);
 }
 
 /* Estilo dos ícones dos itens do menu */
@@ -58,7 +69,7 @@ body {
 
 /* Estilo do botão de logout */
 .logout-button {
-  background-color: #d9534f; /* Cor de fundo vermelha */
+  background-color: #e2635f; /* Cor de fundo vermelha */
   color: white;
   border: none;
   padding: 10px;
@@ -71,7 +82,8 @@ body {
   transition: background-color 0.3s; /* Transição suave ao passar o mouse */
 }
 
-/* Efeito hover para o botão */
+/* Efeito hover para o botão de logout */
 .logout-button:hover {
   background-color: #c9302c; /* Cor de fundo vermelha mais escura ao passar o mouse */
+  transform: scale(1.08); 
 }
