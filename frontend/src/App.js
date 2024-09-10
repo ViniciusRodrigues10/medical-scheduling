@@ -8,8 +8,8 @@ import Choice from './components/Choice';
 import UserProfile from './components/UserProfile';
 import MedicalHistoryForm from './components/MedicalHistoryForm';
 import Schedule from './components/Schedule';
+import History from './components/QueryHistory';
 
-// import Home from './components/Home'; // Exemplo de outra página
 
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
         <Route path="/perfil" element={<UserProfile />} />
         <Route path="/escolha" element={<Choice />} />
         <Route path="/agenda" element={<Schedule />} />
+        <Route path="/login/historico-de-agendamentos" element={<History />} />
       </Routes>
     </Router>
   );
