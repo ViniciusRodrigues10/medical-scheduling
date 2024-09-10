@@ -220,3 +220,32 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     def get_doctor_name(self, obj):
         return f"{obj.id_doctor.user.first_name} {obj.id_doctor.user.last_name}"
+
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    doctor_first_name = serializers.SerializerMethodField()
+    doctor_last_name = serializers.SerializerMethodField()
+    doctor_specialty = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Appointment
+        fields = [
+            "id_appointment",
+            "id_doctor",
+            "date",
+            "start_time",
+            "end_time",
+            "created_at",
+            "doctor_first_name",
+            "doctor_last_name",
+            "doctor_specialty",
+        ]
+
+    def get_doctor_first_name(self, obj):
+        return obj.id_doctor.user.first_name
+
+    def get_doctor_last_name(self, obj):
+        return obj.id_doctor.user.last_name
+
+    def get_doctor_specialty(self, obj):
+        return obj.id_doctor.specialty

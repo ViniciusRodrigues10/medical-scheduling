@@ -44,4 +44,9 @@ urlpatterns = [
         views.get_doctor_appointments_scheduled,
         name="doctor-appointments",
     ),
+    path(
+        "user/appointments/",
+        views.get_user_appointments,
+        name="get-user-appointments",
+    ),
 ]
