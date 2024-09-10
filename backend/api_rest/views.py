@@ -1,11 +1,13 @@
+from datetime import datetime, timedelta
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import AdditionalInformation
+from .models import Availability, Doctor, Appointment
 from .serializers import (
     AdditionalInformationSerializer,
     LifeHabitsSerializer,
     MedicalHistorySerializer,
+    AppointmentSerializer,
 )
 from .facade.views_facade import (
     AppointmentFacade,
@@ -167,3 +169,67 @@ def book_appointment(request):
 def delete_appointment(request):
     appoitment = AppointmentFacade
     return appoitment.delete(request)
+
+
+@api_view(["GET"])
+def get_specialty(request):
+    specialties = Doctor.objects.values_list("specialty", flat=True).distinct()
+    return Response({"specialties": list(specialties)}, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get_specialty_schedule(request, specialty_name):
+    try:
+        doctors = Doctor.objects.filter(specialty=specialty_name)
+
+        if not doctors.exists():
+            return Response(
+                {"error": "Specialty not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        available_slots = Availability.objects.filter(id_doctor__in=doctors)
+
+        response_data = []
+
+        for slot in available_slots:
+            current_start_time = datetime.combine(datetime.today(), slot.start_time)
+            end_time = datetime.combine(datetime.today(), slot.end_time)
+
+            while current_start_time < end_time:
+                next_time = current_start_time + timedelta(minutes=30)
+                if next_time > end_time:
+                    break
+                response_data.append(
+                    {
+                        "doctor_email": slot.id_doctor.user.email,
+                        "doctor_first_name": slot.id_doctor.user.first_name,
+                        "doctor_last_name": slot.id_doctor.user.last_name,
+                        "date": slot.date,
+                        "start_time": current_start_time.time().strftime("%H:%M:%S"),
+                        "end_time": next_time.time().strftime("%H:%M:%S"),
+                    }
+                )
+                current_start_time = next_time
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+    except Doctor.DoesNotExist:
+        return Response(
+            {"error": "Specialty not found"}, status=status.HTTP_404_NOT_FOUND
+        )
+    except Exception as e:
+        logger.error(f"An error occurred: {str(e)}")
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+# @permission_classes([IsAuthenticated])
+def get_doctor_appointments_scheduled(request):
+    try:
+        doctor = Doctor.objects.get(user=request.user)
+    except Doctor.DoesNotExist:
+        return Response({"error": "Doctor not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    appointments = Appointment.objects.filter(id_doctor=doctor)
+    serializer = AppointmentSerializer(appointments, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

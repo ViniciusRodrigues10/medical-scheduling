@@ -240,7 +240,6 @@ class UserDoctorFacade(metaclass=SingletonMeta):
     def delete_account(request):
         try:
             doctor = Doctor.objects.get(user=request.user)
-            print("@@___id user: ", doctor.user)
         except Doctor.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -259,7 +258,6 @@ class UserDoctorFacade(metaclass=SingletonMeta):
 
         elif request.method == "POST":
             user = request.user
-            print("USER: ", user)
             try:
                 doctor = Doctor.objects.get(user=user)
             except Doctor.DoesNotExist:
@@ -415,17 +413,16 @@ class AppointmentFacade:
         try:
             date = datetime.strptime(date_str, "%Y-%m-%d").date()
             start_time = datetime.strptime(start_time_str, "%H:%M:%S").time()
-            curret_date = datetime.today().date()
+            current_date = datetime.today().date()
             current_time = datetime.now().time()
-
         except ValueError as e:
-            return Response({"error: str(e)"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        if date < curret_date:
+        if date < current_date:
             return Response(
                 {"error": "Invalid date"}, status=status.HTTP_400_BAD_REQUEST
             )
-        if date == curret_date and start_time < current_time:
+        if date == current_date and start_time < current_time:
             return Response(
                 {"error": "Invalid time"}, status=status.HTTP_400_BAD_REQUEST
             )
@@ -433,22 +430,21 @@ class AppointmentFacade:
         duration = timedelta(minutes=30)
         end_time = (datetime.combine(date, start_time) + duration).time()
 
-        doctor_id = doctor.user.id_user
         appointment_exists = (
-            Appointment.objects.filter(id_professional=doctor_id, date=date)
+            Appointment.objects.filter(id_doctor=doctor, date=date)
             .filter(start_time__lt=end_time, end_time__gt=start_time)
             .exists()
         )
 
         if appointment_exists:
             return Response(
-                {"message": "The doctor is not available at the given date and time"},
-                status=status.HTTP_200_OK,
+                {"error": "The doctor is not available at the given date and time"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         appointment = Appointment(
-            id_user=user,
-            id_professional=doctor,
+            id_patient=user,
+            id_doctor=doctor,
             date=date,
             start_time=start_time,
             end_time=end_time,
