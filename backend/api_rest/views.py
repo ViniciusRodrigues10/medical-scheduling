@@ -240,7 +240,13 @@ def get_user_appointments(request):
     try:
         user = request.user
 
-        appointments = Appointment.objects.filter(id_patient=user)
+        appointments = Appointment.objects.filter(
+            id_patient=user, date__gt=datetime.now().date()
+        ) | Appointment.objects.filter(
+            id_patient=user,
+            date=datetime.now().date(),
+            end_time__gt=datetime.now().time(),
+        )
 
         serialized_appointments = AppointmentSerializer(appointments, many=True).data
 
