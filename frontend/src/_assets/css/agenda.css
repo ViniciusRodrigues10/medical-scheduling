@@ -54,3 +54,13 @@
 .schedule-button:hover {
     background-color: #45a049;
 }
+
+.specialty {
+    background-color: #007ac2; /* Ciano clarinho */
+    color: rgb(255, 255, 255);
+    font-size: 1.2em; /* Letra maior */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
