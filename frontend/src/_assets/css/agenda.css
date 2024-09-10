@@ -21,29 +21,36 @@
     border-bottom: 1px solid #ddd;
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-}
-
-.user-info span {
-    margin-right: 10px;
-}
-
-.user-perfil {
-    width: 40px; /* Ajusta o tamanho do perfil */
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.user-details {
+.appointments-container {
     margin-top: 20px;
 }
 
-.user-card {
+.appointments-list {
+    list-style: none;
+    padding: 0;
+}
+
+.appointments-list li {
     background-color: #e7e7ff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.schedule-button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.schedule-button:hover {
+    background-color: #45a049;
 }
