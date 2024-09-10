@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
 from .command.views_command import BookAppointmentCommand, DeleteAppointmentCommand
 from .models import Availability, Doctor, Appointment
 from .serializers import (
@@ -225,7 +224,6 @@ def get_specialty_schedule(request, specialty_name):
 
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated])
 def get_doctor_appointments_scheduled(request):
     try:
         doctor = Doctor.objects.get(user=request.user)
@@ -235,3 +233,17 @@ def get_doctor_appointments_scheduled(request):
     appointments = Appointment.objects.filter(id_doctor=doctor)
     serializer = AppointmentSerializer(appointments, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get_user_appointments(request):
+    try:
+        user = request.user
+
+        appointments = Appointment.objects.filter(id_patient=user)
+
+        serialized_appointments = AppointmentSerializer(appointments, many=True).data
+
+        return Response(serialized_appointments, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
