@@ -189,3 +189,34 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "end_time",
             "created_at",
         ]
+
+
+class SpecialtySerializer(serializers.Serializer):
+    specialty = serializers.CharField(max_length=255)
+
+
+from rest_framework import serializers
+from .models import Appointment
+
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    patient_name = serializers.SerializerMethodField()
+    doctor_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Appointment
+        fields = [
+            "id_appointment",
+            "patient_name",
+            "doctor_name",
+            "date",
+            "start_time",
+            "end_time",
+            "created_at",
+        ]
+
+    def get_patient_name(self, obj):
+        return f"{obj.id_patient.first_name} {obj.id_patient.last_name}"
+
+    def get_doctor_name(self, obj):
+        return f"{obj.id_doctor.user.first_name} {obj.id_doctor.user.last_name}"

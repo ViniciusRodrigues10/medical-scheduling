@@ -33,4 +33,15 @@ urlpatterns = [
         views.register_additional_information,
         name="additional-information",
     ),
+    path("specialties/", views.get_specialty, name="specialties"),
+    path(
+        "availability/<str:specialty_name>/",
+        views.get_specialty_schedule,
+        name="available_slots_by_specialty",
+    ),
+    path(
+        "doctor-appointments/",
+        views.get_doctor_appointments_scheduled,
+        name="doctor-appointments",
+    ),
 ]
