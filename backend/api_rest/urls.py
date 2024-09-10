@@ -49,4 +49,9 @@ urlpatterns = [
         views.get_user_appointments,
         name="get-user-appointments",
     ),
+    path(
+        "user/query-history/",
+        views.get_user_past_appointments,
+        name="get-query-history",
+    ),
 ]
