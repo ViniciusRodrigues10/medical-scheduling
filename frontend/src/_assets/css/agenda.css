@@ -1,0 +1,73 @@
+.profile-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f4f4f4;
+    overflow: hidden; 
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 250px; 
+    padding: 20px;
+    background-color: #f4f4f4;
+    overflow-y: auto; 
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f7f7f7;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.appointments-container {
+    margin-top: 20px;
+}
+
+.no-appointments-message {
+    text-align: center;
+    font-size: 1.5em;
+    color: #777;
+}
+
+.appointments-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; 
+    list-style: none;
+    padding: 0;
+}
+
+.appointments-list li {
+    background-color: #e7e7ff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-button {
+    display: block;
+    width: 200px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.schedule-button:hover {
+    background-color: #0056b3;
+}
+.specialty {
+    background-color: #708794; 
+    color: rgb(255, 255, 255);
+    font-size: 1.2em; 
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+}

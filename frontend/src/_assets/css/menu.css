@@ -1,0 +1,89 @@
+/* Impede a rolagem da tela */
+body {
+  margin: 0;
+  overflow: hidden; /* Impede a rolagem */
+}
+
+.sidebar-logo {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Estilo para a barra lateral */
+.sidebar {
+  width: 250px; /* Aumenta a largura da barra lateral */
+  background-color: #f1f1f1;
+  height: 100vh;
+  padding: 20px; /* Mantém o padding consistente */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box; /* Inclui padding na largura total */
+  position: fixed; /* Fixar a barra lateral para não rolar com o conteúdo */
+  top: 0; /* Alinha ao topo da página */
+  left: 0; /* Alinha à esquerda da página */
+}
+
+/* Estilo da lista de menu */
+.menu-list {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  margin-top: 20px; /* Adiciona espaço acima da lista de menu */
+  margin-bottom: 20px; /* Espaçamento abaixo da lista de menu */
+  flex: 1; /* Faz com que a lista de menu ocupe o espaço disponível */
+}
+
+/* Estilo de cada item do menu */
+.menu-item {
+  display: flex;
+  align-items: center;
+  background-color: #d9d9d9;
+  padding: 10px;
+  margin-bottom: 10px; /* Ajuste o espaçamento entre os itens */
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 17px;
+  color: #333;
+  border-radius: 10px 0 0 10px; /* Arredonda apenas os cantos esquerdo */
+  width: 100%;
+  justify-content: start;
+  transition: background-color 0.3s; /* Transição suave ao passar o mouse */
+}
+
+/* Efeito hover para os itens do menu */
+.menu-item:hover {
+  background-color: #979797; /* Cor de fundo mais escura ao passar o mouse */
+}
+
+.menu-item.active {
+  background-color: #979797; /* Cor de fundo mais escura para o item ativo */
+  transform: scale(1.07);
+}
+
+/* Estilo dos ícones dos itens do menu */
+.icon {
+  width: 20px;
+  margin-right: 10px;
+}
+
+/* Estilo do botão de logout */
+.logout-button {
+  background-color: #e2635f; /* Cor de fundo vermelha */
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: auto; /* Empurra o botão para o final da barra lateral */
+  transition: background-color 0.3s; /* Transição suave ao passar o mouse */
+}
+
+/* Efeito hover para o botão de logout */
+.logout-button:hover {
+  background-color: #c9302c; /* Cor de fundo vermelha mais escura ao passar o mouse */
+  transform: scale(1.08); 
+}

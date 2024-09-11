@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -193,23 +193,28 @@ def get_specialty_schedule(request, specialty_name):
         response_data = []
 
         for slot in available_slots:
+            slot_date = slot.date
             current_start_time = datetime.combine(datetime.today(), slot.start_time)
             end_time = datetime.combine(datetime.today(), slot.end_time)
 
-            while current_start_time < end_time:
+            while current_start_time < end_time and slot_date >= date.today():
                 next_time = current_start_time + timedelta(minutes=30)
                 if next_time > end_time:
                     break
-                response_data.append(
-                    {
-                        "doctor_email": slot.id_doctor.user.email,
-                        "doctor_first_name": slot.id_doctor.user.first_name,
-                        "doctor_last_name": slot.id_doctor.user.last_name,
-                        "date": slot.date,
-                        "start_time": current_start_time.time().strftime("%H:%M:%S"),
-                        "end_time": next_time.time().strftime("%H:%M:%S"),
-                    }
-                )
+
+                if current_start_time > datetime.now():
+                    response_data.append(
+                        {
+                            "doctor_email": slot.id_doctor.user.email,
+                            "doctor_first_name": slot.id_doctor.user.first_name,
+                            "doctor_last_name": slot.id_doctor.user.last_name,
+                            "date": slot.date,
+                            "start_time": current_start_time.time().strftime(
+                                "%H:%M:%S"
+                            ),
+                            "end_time": next_time.time().strftime("%H:%M:%S"),
+                        }
+                    )
                 current_start_time = next_time
 
         return Response(response_data, status=status.HTTP_200_OK)
@@ -219,7 +224,6 @@ def get_specialty_schedule(request, specialty_name):
             {"error": "Specialty not found"}, status=status.HTTP_404_NOT_FOUND
         )
     except Exception as e:
-        logger.error(f"An error occurred: {str(e)}")
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -240,7 +244,40 @@ def get_user_appointments(request):
     try:
         user = request.user
 
-        appointments = Appointment.objects.filter(id_patient=user)
+        appointments = Appointment.objects.filter(
+            id_patient=user, date__gt=datetime.now().date()
+        ) | Appointment.objects.filter(
+            id_patient=user,
+            date=datetime.now().date(),
+            end_time__gt=datetime.now().time(),
+        )
+
+        serialized_appointments = AppointmentSerializer(appointments, many=True).data
+
+        return Response(serialized_appointments, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+def get_user_past_appointments(request):
+    try:
+        user = request.user
+
+        if not user.is_authenticated:
+            return Response(
+                {"error": "User is not authenticated"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        now_date = datetime.now().date()
+        now_time = datetime.now().time()
+
+        appointments = Appointment.objects.filter(
+            id_patient=user, date__lt=now_date
+        ) | Appointment.objects.filter(
+            id_patient=user, date=now_date, end_time__lt=now_time
+        )
 
         serialized_appointments = AppointmentSerializer(appointments, many=True).data
 
