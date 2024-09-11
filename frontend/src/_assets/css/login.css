@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url('../img/telafundohome.jpeg') no-repeat center center fixed;
+    background-size: cover;
+}
+  
+.login-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; 
+}
+  
+.login-box {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.384);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    box-sizing: border-box;
+}
+  
+  
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%; 
+    position: relative; 
+}
+  
+  
+.logo img {
+    width: 23vw; 
+    max-width: 500px; 
+    height: auto; 
+    margin-bottom: 70px;
+}
+  
+.input-group {
+    margin-bottom: 15px;
+}
+  
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #979797;
+    opacity: 0.8;
+    border-radius: 5px;
+    font-size: 16px;
+}
+  
+.link-group {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.link-group a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.link-group a:hover {
+    text-decoration: underline;
+}
+
+.link-group a span {
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+  
+.login-button {
+    width: 100%;
+    background-color: #0741AD;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+  
+.login-button:hover {
+    background-color: #004494;}
+  

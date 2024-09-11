@@ -31,6 +31,30 @@ const Schedule = () => {
         }
     };
 
+    const deleteAppointment = async (appointment) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        try {
+            await axios.delete('http://127.0.0.1:8000/api/delete-appointment/', {
+                headers: {
+                    'Authorization': `Token ${token}`
+                },
+                data: {
+                    date: appointment.date,
+                    start_time: appointment.start_time
+                }
+            });
+            setAppointments(appointments.filter(a => a.id_appointment !== appointment.id_appointment));
+        } catch (error) {
+            setError('Erro ao excluir agendamento');
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         fetchAppointments();
     }, [navigate]);
@@ -55,6 +79,12 @@ const Schedule = () => {
                                     <p><strong>Médico:</strong> {appointment.doctor_first_name} {appointment.doctor_last_name}</p>
                                     <p><strong>Data:</strong> {appointment.date}</p>
                                     <p><strong>Hora:</strong> {appointment.start_time} - {appointment.end_time}</p>
+                                    <button 
+                                        className="delete-button"
+                                        onClick={() => deleteAppointment(appointment)}
+                                    >
+                                        Desmarcar
+                                    </button>
                                 </li>
                             ))}
                         </ul>

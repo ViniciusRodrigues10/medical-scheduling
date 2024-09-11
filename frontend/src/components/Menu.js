@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
+import Modal from 'react-modal';  // Importando a biblioteca react-modal
 import '../_assets/css/menu.css'; 
 import logo from '../_assets/img/logo.png';
 import iconHome from '../_assets/img/icone-casa.png';
@@ -8,12 +10,47 @@ import iconCalendar from '../_assets/img/icone-agenda.png';
 import iconReports from '../_assets/img/icone-estati.png';
 import iconSettings from '../_assets/img/icone-opcao.png';
 
+// Configurando o elemento raiz para o modal
+Modal.setAppElement('#root');
+
 const Menu = () => {
     const navigate = useNavigate();
     const location = useLocation(); // Hook para obter a localização atual
+    const [modalIsOpen, setModalIsOpen] = useState(false);  // Estado para controlar o modal
 
     // Função para determinar se o item do menu está ativo
     const isActive = (path) => location.pathname === path;
+
+    // Função de logout
+    const handleLogout = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        try {
+            await axios.post('http://127.0.0.1:8000/api/logout/', {}, {
+                headers: {
+                    'Authorization': `Token ${token}`
+                }
+            });
+            localStorage.removeItem('token');
+            navigate('/login');
+        } catch (error) {
+            console.error('Erro ao fazer logout:', error);
+        }
+    };
+
+    // Função para abrir o modal
+    const openModal = () => {
+        setModalIsOpen(true);
+    };
+
+    // Função para fechar o modal
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
 
     return (
         <div className="sidebar">
@@ -40,7 +77,19 @@ const Menu = () => {
                     Perfil
                 </li>
             </ul>
-            <button onClick={() => navigate('/login')} className="logout-button">Sair</button>
+            <button onClick={openModal} className="logout-button">Sair</button>
+
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="Confirmação de Logout"
+                className="modal"
+                overlayClassName="overlay"
+            >
+                <h2>Tem certeza que deseja sair?</h2>
+                <button onClick={handleLogout} className="confirm-button">Sim</button>
+                <button onClick={closeModal} className="cancel-button">Não</button>
+            </Modal>
         </div>
     );
 };

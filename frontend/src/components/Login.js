@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './../App.css'; // Importa o CSS
+import '../_assets/css/login.css'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
@@ -35,7 +35,7 @@ const Login = () => {
                 const data = await response.json();
                 const token = data.token;
                 localStorage.setItem('token', token);
-                navigate('/perfil'); // Certifique-se de que esta rota está correta no seu roteador
+                navigate('/perfil');
                 console.log('Login realizado com sucesso!');
             } else {
                 const errorData = await response.json();
