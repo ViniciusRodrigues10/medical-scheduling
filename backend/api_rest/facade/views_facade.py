@@ -476,7 +476,7 @@ class AppointmentFacade:
 
         try:
             appointment = Appointment.objects.get(
-                id_user=user, date=date, start_time=start_time
+                id_patient=user, date=date, start_time=start_time
             )
         except Appointment.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
