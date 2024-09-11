@@ -90,7 +90,7 @@ const RegisterDoctor = () => {
               <input
                 type="email"
                 name="email"
-                placeholder="E-mail Acadêmico"
+                placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
                 required
