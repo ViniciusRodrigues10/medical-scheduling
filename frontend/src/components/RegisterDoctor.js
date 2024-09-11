@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../_assets/css/registerDoctor.css'; // Certifique-se de que o caminho está correto
+import '../_assets/css/registerDoctor.css'; 
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
