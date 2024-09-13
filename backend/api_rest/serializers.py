@@ -177,55 +177,17 @@ class UpdateAvailabilitySerializer(serializers.ModelSerializer):
         fields = ["date", "start_time", "end_time"]
 
 
-class AppointmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Appointment
-        fields = [
-            "id_appointment",
-            "id_user",
-            "id_professional",
-            "date",
-            "start_time",
-            "end_time",
-            "created_at",
-        ]
-
-
 class SpecialtySerializer(serializers.Serializer):
     specialty = serializers.CharField(max_length=255)
-
-
-from rest_framework import serializers
-from .models import Appointment
-
-
-class AppointmentSerializer(serializers.ModelSerializer):
-    patient_name = serializers.SerializerMethodField()
-    doctor_name = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Appointment
-        fields = [
-            "id_appointment",
-            "patient_name",
-            "doctor_name",
-            "date",
-            "start_time",
-            "end_time",
-            "created_at",
-        ]
-
-    def get_patient_name(self, obj):
-        return f"{obj.id_patient.first_name} {obj.id_patient.last_name}"
-
-    def get_doctor_name(self, obj):
-        return f"{obj.id_doctor.user.first_name} {obj.id_doctor.user.last_name}"
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
     doctor_first_name = serializers.SerializerMethodField()
     doctor_last_name = serializers.SerializerMethodField()
     doctor_specialty = serializers.SerializerMethodField()
+    patient_id = serializers.SerializerMethodField()
+    patient_first_name = serializers.SerializerMethodField()
+    patient_last_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Appointment
@@ -239,6 +201,9 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "doctor_first_name",
             "doctor_last_name",
             "doctor_specialty",
+            "patient_id",
+            "patient_first_name",
+            "patient_last_name",
         ]
 
     def get_doctor_first_name(self, obj):
@@ -249,3 +214,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     def get_doctor_specialty(self, obj):
         return obj.id_doctor.specialty
+
+    def get_patient_id(self, obj):
+        return obj.id_patient.id_user
+
+    def get_patient_first_name(self, obj):
+        return obj.id_patient.first_name
+
+    def get_patient_last_name(self, obj):
+        return obj.id_patient.last_name
