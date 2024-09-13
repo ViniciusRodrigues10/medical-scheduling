@@ -65,4 +65,9 @@ urlpatterns = [
         views.get_patient_medical_history,
         name="patient-medical-history",
     ),
+    path(
+        "doctor-informations/",
+        views.list_doctor_informations,
+        name="list-doctor-informations",
+    ),
 ]

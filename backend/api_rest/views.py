@@ -9,6 +9,7 @@ from .serializers import (
     LifeHabitsSerializer,
     MedicalHistorySerializer,
     AppointmentSerializer,
+    DoctorSerializer,
 )
 from .facade.views_facade import (
     AppointmentFacade,
@@ -379,5 +380,16 @@ def get_patient_medical_history(request, user_id):
         serialized_medical_history = MedicalHistorySerializer(medical_history).data
 
         return Response(serialized_medical_history, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+def list_doctor_informations(request):
+    try:
+        doctors = Doctor.objects.all()
+        serialized_doctors = DoctorSerializer(doctors, many=True).data
+        return Response(serialized_doctors, status=status.HTTP_200_OK)
+
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
