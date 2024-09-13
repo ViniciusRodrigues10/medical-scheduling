@@ -54,4 +54,15 @@ urlpatterns = [
         views.get_user_past_appointments,
         name="get-query-history",
     ),
+    path("user/main-data/", views.get_main_data, name="main-data"),
+    path(
+        "doctor/appointments-history",
+        views.get_doctor_appointments_history,
+        name="appointments-history",
+    ),
+    path(
+        "patient-medical-history/<int:user_id>/",
+        views.get_patient_medical_history,
+        name="patient-medical-history",
+    ),
 ]
