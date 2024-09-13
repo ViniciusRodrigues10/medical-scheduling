@@ -1,0 +1,93 @@
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.doctor-list-container {
+    display: flex;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.doctor-list-header {
+    background-color: #f7f7f7;
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid #ddd;
+}
+
+.doctor-list-header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 60px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    outline: none; 
+
+}
+
+.search-bar:focus {
+    border-color: #0056b3; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+}
+
+.doctor-list-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.doctor-card {
+    flex: 1 1 calc(33% - 40px);
+    background: white;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
+    min-width: 300px;
+}
+
+.doctor-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+
+.doctor-card h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.loading, .error {
+    text-align: center;
+    font-size: 1.5em;
+    margin-top: 20px;
+}
+
+.loading {
+    color: #007bff;
+}
+
+.error {
+    color: red;
+}

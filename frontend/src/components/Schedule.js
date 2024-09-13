@@ -89,7 +89,7 @@ const Schedule = () => {
                 <div className="appointments-container">
                     {error && <p className="error-message">{error}</p>}
                     {appointments.length === 0 ? (
-                        <p className="no-appointments-message">Não há agendamentos.</p>
+                        <p className="no-schedule-appointments-message">Não há agendamentos.</p>
                     ) : (
                         <ul className="appointments-list">
                             {appointments.map((appointment) => (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Menu';
-import '../_assets/css/agenda.css';
+import '../_assets/css/queryHistory.css';
 
 const History = () => {
     const [appointments, setAppointments] = useState([]);
@@ -43,7 +43,7 @@ const History = () => {
                 <div className="appointments-container">
                     {error && <p className="error-message">{error}</p>}
                     {appointments.length === 0 ? (
-                        <p>Não há histórico de consultas.</p>
+                        <p className="no-hitory-appointments-message">Não há histórico de consultas.</p>
                     ) : (
                         <ul className="appointments-list">
                             {appointments.map((appointment) => (

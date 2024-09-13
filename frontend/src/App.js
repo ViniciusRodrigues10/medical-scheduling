@@ -11,7 +11,8 @@ import Schedule from './components/Schedule';
 import History from './components/QueryHistory';
 import DoctorSchedule from './components/DoctorSchedule';
 import DoctorAvailability from './components/DoctorAvailability';
-
+import Start from './components/Start';
+import Doctors from './components/Doctors'
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
           <Route path="/patient/perfil" element={<UserProfile />} />
           <Route path="/patient/agenda" element={<Schedule />} />
           <Route path="/patient/historico-de-agendamentos" element={<History />} />
+          <Route path="/patient/inicio" element={<Start />} />
+          <Route path="/patient/medicos" element={<Doctors />} />
         </Route>
         <Route path="/doctor">
           <Route path="/doctor/perfil" element={<UserProfile />} />

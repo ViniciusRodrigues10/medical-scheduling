@@ -26,7 +26,7 @@
     margin-top: 20px;
 }
 
-.no-appointments-message {
+.no-schedule-appointments-message {
     text-align: center;
     font-size: 1.5em;
     color: #777;
@@ -65,7 +65,7 @@
     background-color: #0056b3;
 }
 .specialty {
-    background-color: #708794; 
+    background-color: #007bff; 
     color: rgb(255, 255, 255);
     font-size: 1.2em; 
     padding: 10px;
@@ -74,8 +74,6 @@
     display: inline-block;
     flex: 1;
 }
-
-
 
 .delete-button {
     background-color: #ff4d4d; 
