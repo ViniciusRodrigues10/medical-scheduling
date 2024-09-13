@@ -2,15 +2,15 @@
     display: flex;
     height: 100vh;
     background-color: #f4f4f4;
-    overflow: hidden; /* Evita que o conteúdo extrapole a altura da tela */
+    overflow: hidden; 
 }
 
 .main-content {
     flex: 1;
-    margin-left: 250px; /* Adiciona uma margem para não sobrepor a barra lateral */
+    margin-left: 250px; 
     padding: 20px;
     background-color: #f4f4f4;
-    overflow-y: auto; /* Permite rolagem vertical */
+    overflow-y: auto; 
 }
 
 .header {
@@ -26,10 +26,16 @@
     margin-top: 20px;
 }
 
+.no-hitory-appointments-message {
+    text-align: center;
+    font-size: 1.5em;
+    color: #777;
+}
+
 .appointments-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px; /* Espaçamento entre os itens da grade */
+    gap: 20px;
     list-style: none;
     padding: 0;
 }
@@ -58,9 +64,9 @@
     background-color: #0056b3;
 }
 .specialty {
-    background-color: #708794; /* Ciano clarinho */
+    background-color: #708794; 
     color: rgb(255, 255, 255);
-    font-size: 1.2em; /* Letra maior */
+    font-size: 1.2em; 
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
