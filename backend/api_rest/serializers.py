@@ -148,9 +148,35 @@ class EmailAuthTokenSerializer(serializers.Serializer):
 
 
 class DoctorSerializer(serializers.ModelSerializer):
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    telephone = serializers.SerializerMethodField()
+    date_of_birth = serializers.SerializerMethodField()
+
     class Meta:
         model = Doctor
-        fields = ["user", "specialty", "crm", "biography"]
+        fields = [
+            "user",
+            "specialty",
+            "crm",
+            "biography",
+            "first_name",
+            "last_name",
+            "telephone",
+            "date_of_birth",
+        ]
+
+    def get_first_name(self, obj):
+        return obj.user.first_name
+
+    def get_last_name(self, obj):
+        return obj.user.last_name
+
+    def get_telephone(self, obj):
+        return obj.user.additional_info.telephone
+
+    def get_date_of_birth(self, obj):
+        return obj.user.additional_info.date_of_birth
 
 
 class AvailabilitySerializer(serializers.ModelSerializer):
