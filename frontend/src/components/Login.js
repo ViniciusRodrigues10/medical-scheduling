@@ -35,7 +35,7 @@ const Login = () => {
                 const data = await response.json();
                 const token = data.token;
                 localStorage.setItem('token', token);
-                navigate('/perfil');
+                navigate('/login/inicio');
                 console.log('Login realizado com sucesso!');
             } else {
                 const errorData = await response.json();
