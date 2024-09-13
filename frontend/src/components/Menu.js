@@ -13,7 +13,7 @@ import iconSettings from '../_assets/img/icone-opcao.png';
 // Configurando o elemento raiz para o modal
 Modal.setAppElement('#root');
 
-const Menu = () => {
+function Menu ({userType}) {
     const navigate = useNavigate();
     const location = useLocation(); // Hook para obter a localização atual
     const [modalIsOpen, setModalIsOpen] = useState(false);  // Estado para controlar o modal
@@ -52,31 +52,35 @@ const Menu = () => {
         setModalIsOpen(false);
     };
 
+    const menuItems = userType === 'paciente' ? [
+        { path: '/login', label: 'Início', icon: iconHome },
+        { path: '/patient/medicos', label: 'Médicos', icon: iconDoctors },
+        { path: '/patient/agenda', label: 'Agenda', icon: iconCalendar },
+        { path: '/patient/historico-de-agendamentos', label: 'Histórico', icon: iconReports },
+        { path: '/patient/perfil', label: 'Perfil', icon: iconSettings }
+      ] : [
+        { path: '/login', label: 'Início', icon: iconHome },
+        { path: '/doctor/horarios', label: 'Horários', icon: iconDoctors },
+        { path: '/doctor/agenda', label: 'Agenda', icon: iconCalendar },
+        { path: '/doctor/historico', label: 'Histórico', icon: iconReports },
+        { path: '/doctor/perfil', label: 'Perfil', icon: iconSettings }
+      ];
+
     return (
         <div className="sidebar">
-            <img src={logo} alt="Saúde Now" className="sidebar-logo" />
-            <ul className="menu-list">
-                <li className={`menu-item ${isActive('/login') ? 'active' : ''}`} onClick={() => navigate('/login')}>
-                    <img src={iconHome} alt="Ícone de Início" className="icon" />
-                    Início
-                </li>
-                <li className={`menu-item ${isActive('/medicos') ? 'active' : ''}`} onClick={() => navigate('/medicos')}>
-                    <img src={iconDoctors} alt="Ícone de Médicos" className="icon" />
-                    Médicos
-                </li>
-                <li className={`menu-item ${isActive('/agenda') ? 'active' : ''}`} onClick={() => navigate('/agenda')}>
-                    <img src={iconCalendar} alt="Ícone de Agenda" className="icon" />
-                    Agenda
-                </li>
-                <li className={`menu-item ${isActive('/login/historico-de-agendamentos') ? 'active' : ''}`} onClick={() => navigate('/login/historico-de-agendamentos')}>
-                    <img src={iconReports} alt="Ícone de Relatórios" className="icon" />
-                    Histórico
-                </li>
-                <li className={`menu-item ${isActive('/perfil') ? 'active' : ''}`} onClick={() => navigate('/perfil')}>
-                    <img src={iconSettings} alt="Ícone de Opções" className="icon" />
-                    Perfil
-                </li>
-            </ul>
+      <img src={logo} alt="Saúde Now" className="sidebar-logo" />
+      <ul className="menu-list">
+        {menuItems.map((item, index) => (
+          <li
+            key={index}
+            className={`menu-item ${isActive(item.path) ? 'active' : ''}`}
+            onClick={() => navigate(item.path)}
+          >
+            <img src={item.icon} alt={`Ícone de ${item.label}`} className="icon" />
+            {item.label}
+          </li>
+        ))}
+      </ul>
             <button onClick={openModal} className="logout-button">Sair</button>
 
             <Modal

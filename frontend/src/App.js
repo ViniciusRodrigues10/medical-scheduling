@@ -9,21 +9,31 @@ import UserProfile from './components/UserProfile';
 import MedicalHistoryForm from './components/MedicalHistoryForm';
 import Schedule from './components/Schedule';
 import History from './components/QueryHistory';
+import DoctorSchedule from './components/DoctorSchedule';
+import DoctorAvailability from './components/DoctorAvailability';
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} /> 
+        <Route path="/" element={<HomePage />} />
         <Route path="/cadastro-paciente" element={<RegisterPatient />} />
         <Route path="/cadastro-medico" element={<RegisterDoctor />} />
         <Route path="/historico-medico" element={<MedicalHistoryForm />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/perfil" element={<UserProfile />} />
         <Route path="/escolha" element={<Choice />} />
-        <Route path="/agenda" element={<Schedule />} />
-        <Route path="/login/historico-de-agendamentos" element={<History />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/patient">
+          <Route path="/patient/perfil" element={<UserProfile />} />
+          <Route path="/patient/agenda" element={<Schedule />} />
+          <Route path="/patient/historico-de-agendamentos" element={<History />} />
+        </Route>
+        <Route path="/doctor">
+          <Route path="/doctor/perfil" element={<UserProfile />} />
+          <Route path="/doctor/agenda" element={<DoctorSchedule />} />
+          <Route path="/doctor/horarios" element={<DoctorAvailability />} />
+        </Route>
+        
       </Routes>
     </Router>
   );

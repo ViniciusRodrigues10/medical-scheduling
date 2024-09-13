@@ -35,7 +35,11 @@ const Login = () => {
                 const data = await response.json();
                 const token = data.token;
                 localStorage.setItem('token', token);
-                navigate('/perfil');
+
+                if(data.userType === 1)
+                    navigate('/patient/perfil');
+                else
+                    navigate('/doctor/perfil')
                 console.log('Login realizado com sucesso!');
             } else {
                 const errorData = await response.json();

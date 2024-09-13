@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import serializers
 from .models import (
     CustomUser,
@@ -170,6 +171,18 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             "specialty",
         ]
 
+    def validate(self, data):
+        current_date = datetime.now().date()
+        current_time = datetime.now().time()
+
+        if data['date'] < current_date:
+            raise serializers.ValidationError("Não é possível criar um horário no passado.")
+        
+        if data['date'] == current_date and data['start_time'] < current_time:
+            raise serializers.ValidationError("O horário de início não pode ser no passado.")
+        
+        return data
+
 
 class UpdateAvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
@@ -226,12 +239,15 @@ class AppointmentSerializer(serializers.ModelSerializer):
     doctor_first_name = serializers.SerializerMethodField()
     doctor_last_name = serializers.SerializerMethodField()
     doctor_specialty = serializers.SerializerMethodField()
+    patient_first_name = serializers.SerializerMethodField()
+    patient_last_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Appointment
         fields = [
             "id_appointment",
             "id_doctor",
+            "id_patient",
             "date",
             "start_time",
             "end_time",
@@ -239,6 +255,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "doctor_first_name",
             "doctor_last_name",
             "doctor_specialty",
+            "patient_first_name",
+            "patient_last_name"
         ]
 
     def get_doctor_first_name(self, obj):
@@ -249,3 +267,9 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     def get_doctor_specialty(self, obj):
         return obj.id_doctor.specialty
+    
+    def get_patient_first_name(self, obj):
+        return obj.id_patient.first_name
+
+    def get_patient_last_name(self, obj):
+        return obj.id_patient.last_name

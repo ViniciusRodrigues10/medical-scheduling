@@ -1,0 +1,167 @@
+/* Estilos baseados em agenda.css */
+
+.availability-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f4f4f4;
+    overflow: hidden;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 250px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    overflow-y: auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f7f7f7;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.availability-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.availability-form h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.availability-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.availability-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.availability-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.availability-form button:hover {
+    background-color: #0056b3;
+}
+
+.availabilities-list {
+    margin-top: 20px;
+}
+
+.availabilities-list h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.availabilities-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.availabilities-list li {
+    background-color: #e7e7ff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.availabilities-list li p {
+    margin: 0;
+}
+
+.success-message {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Estilos baseados em appointment.Popup.css */
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    max-width: 80%;
+}
+
+.popup h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.popup .form-group {
+    margin-bottom: 15px;
+}
+
+.popup .form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.popup .form-group input,
+.popup .form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.popup .form-group button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.popup .form-group button:hover {
+    background-color: #0056b3;
+}

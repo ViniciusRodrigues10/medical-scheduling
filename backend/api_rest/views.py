@@ -231,12 +231,17 @@ def get_specialty_schedule(request, specialty_name):
 def get_doctor_appointments_scheduled(request):
     try:
         doctor = Doctor.objects.get(user=request.user)
-    except Doctor.DoesNotExist:
-        return Response({"error": "Doctor not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    appointments = Appointment.objects.filter(id_doctor=doctor)
-    serializer = AppointmentSerializer(appointments, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+        appointments = Appointment.objects.filter(
+            id_doctor=doctor, date__gt=datetime.now().date()
+        ) | Appointment.objects.filter(
+            id_doctor=doctor,
+            date=datetime.now().date(),
+            end_time__gt=datetime.now().time(),
+        )
+        serializer = AppointmentSerializer(appointments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(["GET"])
