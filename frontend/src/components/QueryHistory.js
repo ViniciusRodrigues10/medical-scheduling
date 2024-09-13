@@ -43,7 +43,7 @@ const History = () => {
                 <div className="appointments-container">
                     {error && <p className="error-message">{error}</p>}
                     {appointments.length === 0 ? (
-                        <p>Não há histórico de consultas.</p>
+                        <p className="no-hitory-appointments-message">Não há histórico de consultas.</p>
                     ) : (
                         <ul className="appointments-list">
                             {appointments.map((appointment) => (
