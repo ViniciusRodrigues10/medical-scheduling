@@ -9,7 +9,7 @@ import UserProfile from './components/UserProfile';
 import MedicalHistoryForm from './components/MedicalHistoryForm';
 import Schedule from './components/Schedule';
 import History from './components/QueryHistory';
-
+import Start from './components/Start';
 
 function App() {
   return (
@@ -24,6 +24,7 @@ function App() {
         <Route path="/escolha" element={<Choice />} />
         <Route path="/agenda" element={<Schedule />} />
         <Route path="/login/historico-de-agendamentos" element={<History />} />
+        <Route path="/login/inicio" element={<Start />} />
       </Routes>
     </Router>
   );
