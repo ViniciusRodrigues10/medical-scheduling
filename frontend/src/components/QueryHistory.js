@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Menu';
-import '../_assets/css/agenda.css';
+import '../_assets/css/queryHistory.css';
 
 const History = () => {
     const [appointments, setAppointments] = useState([]);
