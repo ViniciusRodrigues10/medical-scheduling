@@ -3,12 +3,13 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .command.views_command import BookAppointmentCommand, DeleteAppointmentCommand
-from .models import Availability, Doctor, Appointment
+from .models import Availability, Doctor, Appointment, MedicalHistory, CustomUser
 from .serializers import (
     AdditionalInformationSerializer,
     LifeHabitsSerializer,
     MedicalHistorySerializer,
     AppointmentSerializer,
+    DoctorSerializer,
 )
 from .facade.views_facade import (
     AppointmentFacade,
@@ -282,5 +283,113 @@ def get_user_past_appointments(request):
         serialized_appointments = AppointmentSerializer(appointments, many=True).data
 
         return Response(serialized_appointments, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+def get_main_data(request):
+    try:
+        user = request.user
+
+        if not user.is_authenticated:
+            return Response(
+                {"error": "User is not authenticated"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        now_date = datetime.now().date()
+
+        future_appointments_count = Appointment.objects.filter(
+            id_patient=user, date__gte=now_date
+        ).count()
+
+        past_appointments_count = Appointment.objects.filter(
+            id_patient=user, date__lt=now_date
+        ).count()
+
+        user_info = {
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "gender": dict(user.GENDER_CHOICES).get(user.gender, "Unknown"),
+            "user_type": dict(user.USER_TYPE_CHOICES).get(user.user_type, "Unknown"),
+        }
+
+        doctors_count = Doctor.objects.count()
+
+        data = {
+            "future_appointments": future_appointments_count,
+            "past_appointments": past_appointments_count,
+            "user_info": user_info,
+            "doctors_count": doctors_count,
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+def get_doctor_appointments_history(request):
+    try:
+        user = request.user
+        doctor = Doctor.objects.get(user=user)
+
+        if not user.is_authenticated:
+            return Response(
+                {"error": "User is not authenticated"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        now_date = datetime.now().date()
+        now_time = datetime.now().time()
+
+        appointments = Appointment.objects.filter(
+            id_doctor=doctor, date__lt=now_date
+        ) | Appointment.objects.filter(
+            id_doctor=doctor, date=now_date, end_time__lt=now_time
+        )
+
+        serialized_appointments = AppointmentSerializer(appointments, many=True).data
+
+        return Response(serialized_appointments, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+def get_patient_medical_history(request, user_id):
+    try:
+        try:
+            user = CustomUser.objects.get(id_user=user_id)
+        except CustomUser.DoesNotExist:
+            return Response(
+                {"error": "User does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        try:
+            medical_history = MedicalHistory.objects.get(id_user=user)
+        except MedicalHistory.DoesNotExist:
+            return Response(
+                {"error": "Medical history does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serialized_medical_history = MedicalHistorySerializer(medical_history).data
+
+        return Response(serialized_medical_history, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(["GET"])
+def list_doctor_informations(request):
+    try:
+        doctors = Doctor.objects.all()
+        serialized_doctors = DoctorSerializer(doctors, many=True).data
+        return Response(serialized_doctors, status=status.HTTP_200_OK)
+
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

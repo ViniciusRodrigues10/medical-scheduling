@@ -56,7 +56,7 @@ const Menu = () => {
                     <img src={iconHome} alt="Ícone de Início" className="icon" />
                     Início
                 </li>
-                <li className={`menu-item ${isActive('/medicos') ? 'active' : ''}`} onClick={() => navigate('/medicos')}>
+                <li className={`menu-item ${isActive('/login/medicos') ? 'active' : ''}`} onClick={() => navigate('/login/medicos')}>
                     <img src={iconDoctors} alt="Ícone de Médicos" className="icon" />
                     Médicos
                 </li>
