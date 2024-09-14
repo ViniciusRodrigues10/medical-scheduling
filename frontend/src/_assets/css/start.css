@@ -1,18 +1,20 @@
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #fff; /* Fundo branco */
     margin: 0;
     padding: 0;
+    height: 100vh; /* Garante que o fundo branco cubra toda a altura da tela */
 }
 
 .dashboard-container {
     display: flex;
+    min-height: 100vh; /* Garante que a tela ocupe toda a altura */
 }
 
 .main-content {
     flex: 1;
     padding: 20px;
-    background-color: #fff;
+    background-color: #fff; /* Fundo branco para a área principal */
 }
 
 .dashboard-header {

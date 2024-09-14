@@ -9,6 +9,7 @@ import iconDoctors from '../_assets/img/icone-perfil.png';
 import iconCalendar from '../_assets/img/icone-agenda.png';
 import iconReports from '../_assets/img/icone-estati.png';
 import iconSettings from '../_assets/img/icone-opcao.png';
+import iconTime from '../_assets/img/icone-hora.png';
 
 
 Modal.setAppElement('#root');
@@ -57,7 +58,7 @@ const Menu = () => {
                     Início
                 </li>
                 <li className={`menu-item ${isActive('/doctor/horarios') ? 'active' : ''}`} onClick={() => navigate('/doctor/horarios')}>
-                    <img src={iconDoctors} alt="Ícone de Médicos" className="icon" />
+                    <img src={iconTime} alt="Ícone de Médicos" className="icon" />
                     Horários
                 </li>
                 <li className={`menu-item ${isActive('/doctor/agenda') ? 'active' : ''}`} onClick={() => navigate('/doctor/agenda')}>
