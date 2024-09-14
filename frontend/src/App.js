@@ -9,10 +9,13 @@ import UserProfile from './components/UserProfile';
 import MedicalHistoryForm from './components/MedicalHistoryForm';
 import Schedule from './components/Schedule';
 import History from './components/QueryHistory';
+import DoctorHistory from './components/DoctorAppointmentsHistory';
 import DoctorSchedule from './components/DoctorSchedule';
 import DoctorAvailability from './components/DoctorAvailability';
 import Start from './components/Start';
-import Doctors from './components/Doctors'
+import DoctorStart from './components/DoctorStart';
+import Doctors from './components/Doctors';
+import DoctorProfile from './components/DoctorProfile';
 
 function App() {
   return (
@@ -32,9 +35,11 @@ function App() {
           <Route path="/patient/medicos" element={<Doctors />} />
         </Route>
         <Route path="/doctor">
-          <Route path="/doctor/perfil" element={<UserProfile />} />
-          <Route path="/doctor/agenda" element={<DoctorSchedule />} />
+          <Route path="/doctor/inicio" element={<DoctorStart />} />
           <Route path="/doctor/horarios" element={<DoctorAvailability />} />
+          <Route path="/doctor/agenda" element={<DoctorSchedule />} />
+          <Route path="/doctor/historico" element={<DoctorHistory />} />
+          <Route path="/doctor/perfil" element={<DoctorProfile />} />
         </Route>
         
       </Routes>
