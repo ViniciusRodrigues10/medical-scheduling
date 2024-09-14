@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import serializers
 from .models import (
     CustomUser,
@@ -196,6 +197,18 @@ class AvailabilitySerializer(serializers.ModelSerializer):
             "specialty",
         ]
 
+    def validate(self, data):
+        current_date = datetime.now().date()
+        current_time = datetime.now().time()
+
+        if data['date'] < current_date:
+            raise serializers.ValidationError("Não é possível criar um horário no passado.")
+        
+        if data['date'] == current_date and data['start_time'] < current_time:
+            raise serializers.ValidationError("O horário de início não pode ser no passado.")
+        
+        return data
+
 
 class UpdateAvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
@@ -220,6 +233,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         fields = [
             "id_appointment",
             "id_doctor",
+            "id_patient",
             "date",
             "start_time",
             "end_time",

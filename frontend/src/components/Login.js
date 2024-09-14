@@ -35,7 +35,11 @@ const Login = () => {
                 const data = await response.json();
                 const token = data.token;
                 localStorage.setItem('token', token);
-                navigate('/login/inicio');
+
+                if(data.user_info.user_type === 2)
+                    navigate('/doctor/perfil');
+                else
+                    navigate('/patient/inicio')
                 console.log('Login realizado com sucesso!');
             } else {
                 const errorData = await response.json();
@@ -44,8 +48,6 @@ const Login = () => {
         } catch (error) {
             setError('Erro na conexão com o servidor');
         }
-        console.log('Email:', email);
-        console.log('Senha:', password);
     };
 
     return (

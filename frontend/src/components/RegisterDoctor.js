@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../_assets/css/registerDoctor.css'; 
+import { useNavigate } from 'react-router-dom';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -22,6 +23,7 @@ const RegisterDoctor = () => {
   });
 
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,6 +54,7 @@ const RegisterDoctor = () => {
       });
       if (response.status === 201) {
         console.log('Doctor registered successfully!');
+        navigate('/login');
       } else {
         setError('Registration failed');
       }

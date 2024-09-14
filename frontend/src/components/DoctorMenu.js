@@ -52,23 +52,23 @@ const Menu = () => {
         <div className="sidebar">
             <img src={logo} alt="Saúde Now" className="sidebar-logo" />
             <ul className="menu-list">
-                <li className={`menu-item ${isActive('/patient/inicio') ? 'active' : ''}`} onClick={() => navigate('/patient/inicio')}>
+                <li className={`menu-item ${isActive('/doctor/inicio') ? 'active' : ''}`} onClick={() => navigate('/doctor/inicio')}>
                     <img src={iconHome} alt="Ícone de Início" className="icon" />
                     Início
                 </li>
-                <li className={`menu-item ${isActive('/patient/medicos') ? 'active' : ''}`} onClick={() => navigate('/patient/medicos')}>
+                <li className={`menu-item ${isActive('/doctor/horarios') ? 'active' : ''}`} onClick={() => navigate('/doctor/horarios')}>
                     <img src={iconDoctors} alt="Ícone de Médicos" className="icon" />
-                    Médicos
+                    Horários
                 </li>
-                <li className={`menu-item ${isActive('/patient/agenda') ? 'active' : ''}`} onClick={() => navigate('/patient/agenda')}>
+                <li className={`menu-item ${isActive('/doctor/agenda') ? 'active' : ''}`} onClick={() => navigate('/doctor/agenda')}>
                     <img src={iconCalendar} alt="Ícone de Agenda" className="icon" />
                     Agenda
                 </li>
-                <li className={`menu-item ${isActive('/patient/historico-de-agendamentos') ? 'active' : ''}`} onClick={() => navigate('/patient/historico-de-agendamentos')}>
+                <li className={`menu-item ${isActive('/doctor/historico') ? 'active' : ''}`} onClick={() => navigate('/doctor/historico')}>
                     <img src={iconReports} alt="Ícone de Relatórios" className="icon" />
                     Histórico
                 </li>
-                <li className={`menu-item ${isActive('/patient/perfil') ? 'active' : ''}`} onClick={() => navigate('/patient/perfil')}>
+                <li className={`menu-item ${isActive('/doctor/perfil') ? 'active' : ''}`} onClick={() => navigate('/doctor/perfil')}>
                     <img src={iconSettings} alt="Ícone de Opções" className="icon" />
                     Perfil
                 </li>
