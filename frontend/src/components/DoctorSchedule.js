@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from './Menu';
+import Sidebar from './DoctorMenu';
 import Modal from 'react-modal';
 import '../_assets/css/agenda.css';
 
@@ -12,6 +12,8 @@ const Schedule = () => {
     const [error, setError] = useState('');
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const [medicalHistory, setMedicalHistory] = useState(null);
+    const [historyModalIsOpen, setHistoryModalIsOpen] = useState(false);
     const navigate = useNavigate();
 
     const fetchAppointments = async () => {
@@ -62,6 +64,27 @@ const Schedule = () => {
         closeModal();
     };
 
+    const fetchMedicalHistory = async (patientId) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        try {
+            const response = await axios.get(`http://localhost:8000/api/patient-medical-history/${patientId}/`, {
+                headers: {
+                    'Authorization': `Token ${token}`
+                }
+            });
+            setMedicalHistory(response.data);
+            setHistoryModalIsOpen(true);
+        } catch (error) {
+            setError('Erro ao obter histórico médico');
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         fetchAppointments();
     }, [navigate]);
@@ -74,6 +97,15 @@ const Schedule = () => {
     const closeModal = () => {
         setModalIsOpen(false);
         setSelectedAppointment(null);
+    };
+
+    const openHistoryModal = (patientId) => {
+        fetchMedicalHistory(patientId);
+    };
+
+    const closeHistoryModal = () => {
+        setHistoryModalIsOpen(false);
+        setMedicalHistory(null);
     };
 
     return (
@@ -94,6 +126,12 @@ const Schedule = () => {
                                     <p><strong>Paciente:</strong> {appointment.patient_first_name} {appointment.patient_last_name}</p>
                                     <p><strong>Data:</strong> {appointment.date}</p>
                                     <p><strong>Hora:</strong> {appointment.start_time} - {appointment.end_time}</p>
+                                    <button 
+                                        className="view-history-button"
+                                        onClick={() => openHistoryModal(appointment.id_patient)}
+                                    >
+                                        Ver Histórico Médico
+                                    </button>
                                     <button 
                                         className="delete-button"
                                         onClick={() => openModal(appointment)}
@@ -116,6 +154,27 @@ const Schedule = () => {
                 <h2>Tem certeza que deseja desmarcar a consulta?</h2>
                 <button onClick={deleteAppointment} className="confirm-button">Sim</button>
                 <button onClick={closeModal} className="cancel-button">Não</button>
+            </Modal>
+            <Modal
+                isOpen={historyModalIsOpen}
+                onRequestClose={closeHistoryModal}
+                contentLabel="Histórico Médico"
+                className="modal"
+                overlayClassName="overlay"
+            >
+                <h2>Histórico Médico do Paciente</h2>
+                {medicalHistory ? (
+                    <div>
+                        {/* Renderize os detalhes do histórico médico aqui */}
+                        <p><strong>Doenças:</strong> {medicalHistory.diseases}</p>
+                        <p><strong>Medicamentos:</strong> {medicalHistory.medications}</p>
+                        <p><strong>Alergias:</strong> {medicalHistory.allergies}</p>
+                        {/* Adicione mais informações conforme necessário */}
+                    </div>
+                ) : (
+                    <p>Carregando...</p>
+                )}
+                <button onClick={closeHistoryModal} className="close-button">Fechar</button>
             </Modal>
         </div>
     );

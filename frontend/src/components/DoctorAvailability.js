@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from './Menu';
+import Sidebar from './DoctorMenu';
+import Modal from 'react-modal';
 import '../_assets/css/availability.css';
+
+Modal.setAppElement('#root');
 
 const AvailabilityManager = () => {
     const [availabilities, setAvailabilities] = useState([]);
@@ -14,6 +17,7 @@ const AvailabilityManager = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [minTime, setMinTime] = useState('');
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const navigate = useNavigate();
 
     // Função para buscar horários disponíveis
@@ -56,6 +60,7 @@ const AvailabilityManager = () => {
             setSuccess('Horário criado com sucesso!');
             setNewAvailability({ date: '', start_time: '', end_time: '' });
             fetchAvailabilities(); // Atualiza a lista de horários após criar um novo
+            closeModal(); // Fecha o popup
         } catch (error) {
             setError('Erro ao criar horário');
             console.error(error);
@@ -127,58 +132,26 @@ const AvailabilityManager = () => {
         });
     };
 
+    const openModal = () => {
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
+
     return (
         <div className="availability-container">
             <Sidebar />
             <div className="main-content">
                 <header className="header">
                     <h1>Gerenciar Horários de Disponibilidade</h1>
+                    <button onClick={openModal} className="schedule-button">Criar Novo Horário</button>
                 </header>
-                <div className="availability-form">
-                    <h2>Criar Novo Horário</h2>
+                <div className="availability-list">
+                    <h2>Horários de Disponibilidade Futuros</h2>
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                        createAvailability();
-                    }}>
-                        <label>
-                            Data:
-                            <input 
-                                type="date" 
-                                name="date"
-                                min={getCurrentDate()} 
-                                value={newAvailability.date}
-                                onChange={handleDateChange}
-                                required 
-                            />
-                        </label>
-                        <label>
-                            Início:
-                            <input 
-                                type="time" 
-                                name="start_time" 
-                                value={newAvailability.start_time}
-                                min={minTime}
-                                onChange={handleChange}
-                                required 
-                            />
-                        </label>
-                        <label>
-                            Fim:
-                            <input 
-                                type="time" 
-                                name="end_time" 
-                                value={newAvailability.end_time}
-                                onChange={handleChange}
-                                required 
-                            />
-                        </label>
-                        <button type="submit">Criar Horário</button>
-                    </form>
-                </div>
-                <div className="availabilities-list">
-                    <h2>Horários de Disponibilidade Futuros</h2>
                     {availabilities.length === 0 ? (
                         <p>Nenhum horário disponível</p>
                     ) : (
@@ -193,6 +166,54 @@ const AvailabilityManager = () => {
                     )}
                 </div>
             </div>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="Criar Novo Horário"
+                className="modal"
+                overlayClassName="overlay"
+            >
+                <h2>Criar Novo Horário</h2>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    createAvailability();
+                }}>
+                    <label>
+                        Data:
+                        <input 
+                            type="date" 
+                            name="date"
+                            min={getCurrentDate()} 
+                            value={newAvailability.date}
+                            onChange={handleDateChange}
+                            required 
+                        />
+                    </label>
+                    <label>
+                        Início:
+                        <input 
+                            type="time" 
+                            name="start_time" 
+                            value={newAvailability.start_time}
+                            min={minTime}
+                            onChange={handleChange}
+                            required 
+                        />
+                    </label>
+                    <label>
+                        Fim:
+                        <input 
+                            type="time" 
+                            name="end_time" 
+                            value={newAvailability.end_time}
+                            onChange={handleChange}
+                            required 
+                        />
+                    </label>
+                    <button type="submit" className="confirm-button">Criar Horário</button>
+                    <button type="button" onClick={closeModal} className="cancel-button">Cancelar</button>
+                </form>
+            </Modal>
         </div>
     );
 };
