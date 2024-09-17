@@ -166,8 +166,8 @@ const Schedule = () => {
                 {medicalHistory ? (
                     <div>
                         {/* Renderize os detalhes do histórico médico aqui */}
-                        <p><strong>Doenças:</strong> {medicalHistory.diseases}</p>
-                        <p><strong>Medicamentos:</strong> {medicalHistory.medications}</p>
+                        <p><strong>Tipo Sanguíneo:</strong> {medicalHistory.blood_type ? medicalHistory.blood_type.toUpperCase() : 'Não informado'}</p>
+                        <p><strong>Medicamentos:</strong> {medicalHistory.current_medications}</p>
                         <p><strong>Alergias:</strong> {medicalHistory.allergies}</p>
                         {/* Adicione mais informações conforme necessário */}
                     </div>

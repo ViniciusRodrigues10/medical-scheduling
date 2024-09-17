@@ -44,7 +44,7 @@ const MedicalHistoryFormPage = () => {
         },
       });
       if (response.status === 201) {
-        navigate('/perfil'); // Navega de volta para a página de perfil do usuário após a submissão
+        navigate('/patient/perfil'); // Navega de volta para a página de perfil do usuário após a submissão
       }
     } catch (error) {
       setError('Erro ao enviar dados. Por favor, tente novamente.');
