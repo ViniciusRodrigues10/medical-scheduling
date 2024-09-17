@@ -126,7 +126,6 @@ const UserProfile = () => {
                     ) : (
                         <>
                             <h2>Meus Dados</h2>
-                            <button onClick={() => navigate('/historico-medico')} className="history-button">Preencher Histórico Médico</button>
                             <div className="user-card">
                                 <form onSubmit={handleUpdate}>
                                     <h3>Redefinir Dados</h3>

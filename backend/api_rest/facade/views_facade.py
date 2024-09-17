@@ -306,8 +306,9 @@ class AvailabilityFacade(metaclass=SingletonMeta):
         data = request.data.copy()
         doctor_name = data.get("doctor_name", None)
         specialty = data.get("specialty", None)
+        doctor = request.user.doctor
 
-        availabilities = Availability.objects.all()
+        availabilities = Availability.objects.filter(id_doctor=doctor)
 
         if doctor_name:
             availabilities = availabilities.filter(
