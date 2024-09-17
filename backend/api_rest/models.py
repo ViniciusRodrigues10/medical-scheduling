@@ -119,7 +119,7 @@ class Doctor(models.Model):
     biography = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.adittional_info.first_name} {self.adittional_info.last_name} - {self.specialty}"
+        return f"{self.user.first_name} {self.user.last_name} - {self.specialty}"
 
 
 class Availability(models.Model):

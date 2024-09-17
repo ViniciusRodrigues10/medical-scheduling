@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "knox",
     "api_rest.apps.ApiRestConfig",
     "corsheaders",
+    "channels",
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,16 @@ MIDDLEWARE = [
     "api_rest.middleware.LogMiddleware",
     "corsheaders.middleware.CorsMiddleware",
 ]
+
+ASGI_APPLICATION = "api_rest.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],  # Configure o endereço do seu Redis
+        },
+    },
+}
 
 REST_FRAMEWORK = {"DEFAULT_PERMISSION_CLASSES": ["rest_framework.permission.AllowAny"]}
 
