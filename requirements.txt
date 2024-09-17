@@ -1,8 +1,11 @@
 argcomplete==3.3.0
 asgiref==3.8.1
+async-timeout==4.0.3
 black==24.4.2
 cffi==1.16.0
 cfgv==3.4.0
+channels==4.1.0
+channels-redis==4.2.0
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
@@ -19,6 +22,7 @@ identify==2.5.36
 importlib_metadata==7.2.1
 Jinja2==3.1.4
 MarkupSafe==2.1.5
+msgpack==1.1.0
 mypy-extensions==1.0.0
 nodeenv==1.9.1
 packaging==24.1
@@ -29,6 +33,7 @@ prompt-toolkit==3.0.36
 pycparser==2.22
 PyYAML==6.0.1
 questionary==2.0.1
+redis==5.0.8
 sqlparse==0.5.0
 termcolor==2.4.0
 tomli==2.0.1
