@@ -195,8 +195,8 @@ def get_specialty_schedule(request, specialty_name):
 
         for slot in available_slots:
             slot_date = slot.date
-            current_start_time = datetime.combine(datetime.today(), slot.start_time)
-            end_time = datetime.combine(datetime.today(), slot.end_time)
+            current_start_time = datetime.combine(slot.date, slot.start_time)
+            end_time = datetime.combine(slot.date, slot.end_time)
 
             while current_start_time < end_time and slot_date >= date.today():
                 next_time = current_start_time + timedelta(minutes=30)
